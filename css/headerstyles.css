@@ -1,0 +1,74 @@
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+body {
+  animation: fadeIn 1s ease-in-out; 
+  margin: 20;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #121212;
+  color: white;
+}
+/*------------------------------------------------------*/
+header {
+  background: url('../foto/Pool-at-night_High-Res_13015-1550x555.jpg');
+  background-size: cover;
+  height: 300px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+header::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+.header-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+.header-content h1 {
+  font-size: 3.2rem;
+  margin-bottom: 1rem;
+  color: #f5c518;
+}
+
+/*------------------------------------------------------*/
+nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+nav a {
+  color: white;
+  margin: 0 1rem;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+}
+nav a:hover {
+  color: #f5c518;
+}
+nav a.book {
+  background: #f5c518;
+  color: #121212;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  margin-left: 1rem;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
+}
+nav a.book:hover {
+  background: #ffdb4d;
+  transform: scale(1.05);
+}

@@ -1,0 +1,77 @@
+/* Footer Styling */
+footer {
+    background-color: #222; /* Darker background for a more refined look */
+    color: #f8f8f8; /* Light text for contrast */
+    padding: 20px 0; /* Increased padding for more breathing space */
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    border-top: 5px solid #f5c518; /* Gold border on top to match the luxury theme */
+  }
+  
+  /* Footer Container */
+  footer .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px; /* Added horizontal padding for better spacing */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Footer Text */
+  footer p {
+    font-size: 1rem;
+    margin: 10px 0;
+    line-height: 1.5;
+    color: #ddd; /* Lighter grey text for readability */
+  }
+  
+  /* Footer Links */
+  footer a {
+    color: #f5c518; /* Golden color for links */
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 1.1rem;
+    font-weight: bold; /* Make links stand out */
+    transition: color 0.3s ease-in-out; /* Smooth transition for hover effect */
+  }
+  
+  footer a:hover {
+    color: #ffdf50; /* A lighter gold on hover */
+    text-decoration: underline; /* Adds underline on hover */
+  }
+  
+  /* Social Links Styling */
+  footer .social-links {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  footer .social-links a {
+    margin: 0 15px;
+    font-size: 1.3rem; /* Slightly larger icons */
+    transition: transform 0.3s ease; /* Smooth animation for hover */
+  }
+  
+  footer .social-links a:hover {
+    transform: scale(1.1); /* Slightly enlarge icons on hover */
+    color: #ffdf50; /* A lighter gold on hover */
+  }
+  
+  /* Back to Home Link */
+  footer .home-link {
+    display: block;
+    margin-top: 30px;
+    font-size: 1.2rem;
+    color: #f5c518;
+    text-transform: uppercase; /* All caps for emphasis */
+  }
+  
+  footer .home-link:hover {
+    text-decoration: underline;
+    color: #ffdf50;
+    font-weight: bold; /* Bold font on hover */
+  }
+  
