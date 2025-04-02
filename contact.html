@@ -1,31 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Amanpuri Hotel - Contact</title>
-  <link rel="stylesheet" href="css/headerstyles.css">
-  <link rel="stylesheet" href="css/footerstyles.css">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Amanpuri Hotel - Contact</title>
+    <link rel="stylesheet" href="css/headerstyles.css" />
+    <link rel="stylesheet" href="css/footerstyles.css" />
+  </head>
+  <body>
+    <div id="header"></div>
+    <script>
+      fetch("header.html")
+        .then((res) => res.text())
+        .then((data) => (document.getElementById("header").innerHTML = data));
+    </script>
 
-</head>
-<body>
-  <div id="header"></div>
-  <script>
-    fetch('header.html')
-      .then(res => res.text())
-      .then(data => document.getElementById('header').innerHTML = data);
-  </script>
+    <div>
+      <div
+        style="
+          text-align: center;
+          border-radius: 15px;
+          background-color: #ffde6561;
+          margin-top: -50px;
+        "
+      >
+        <h5 style="font-size: 2rem; color: #f8f8f8">CONTACT</h5>
+      </div>
 
-  <main >
-    <div style="justify-content: center; text-align: center; border-radius: 15px; background-color: #ffde6561; margin-top: -50px;margin-bottom: -30px;">
-        <h5 style="font-size: 2rem; color: #f8f8f8;">CONTACT</h5> <!-- Smaller font-size -->
-      </div>  </main>
-      
-  
-   <div id="footer"></div>
-   <script>
-     fetch('footer.html')  <!-- Fetch the footer HTML file -->
-       .then(response => response.text())
-       .then(data => document.getElementById('footer').innerHTML = data);
-   </script>
-</body>
+      <div class="tabs">
+        <div class="tab active" onclick="switchForm('flight')">
+          ✈️ Flight Assistance
+        </div>
+        <div class="tab" onclick="switchForm('car')">🚗 Car Pickup</div>
+        <div class="tab" onclick="switchForm('lost')">🕵️ Lost Item</div>
+      </div>
+
+      <div class="form-container">
+        <form id="flight" class="form-section active" action="" method="POST">
+          <label>Name:</label>
+          <input type="text" name="name" required />
+          <label>Lastname:</label>
+          <input type="text" name="lastname" required />
+          <label>Email:</label>
+          <input type="email" name="email" required />
+          <label>Phone Number:</label>
+          <input type="tel" name="phone" required />
+          <label>Flight Number:</label>
+          <input type="text" name="flight_number" required />
+          <label>Arrival Date:</label>
+          <input type="date" name="arrival_date" required />
+          <label>Special Notes:</label>
+          <textarea name="notes"></textarea>
+          <button type="submit">Submit Flight Details</button>
+        </form>
+
+        <form
+          id="car"
+          class="form-section"
+          action="car-handler.php"
+          method="POST"
+        >
+          <label>Name:</label>
+          <input type="text" name="name" required />
+          <label>Lastname:</label>
+          <input type="text" name="lastname" required />
+          <label>Email:</label>
+          <input type="email" name="email" required />
+          <label>Phone Number:</label>
+          <input type="tel" name="phone" required />
+          <label>Pickup Date & Time:</label>
+          <input type="datetime-local" name="pickup_time" required />
+          <label>Pickup Location:</label>
+          <input type="text" name="pickup_location" required />
+          <label>Destination:</label>
+          <input type="text" name="destination" required />
+          <label>Vehicle Preference:</label>
+          <select name="vehicle">
+            <option>Sedan</option>
+            <option>SUV</option>
+            <option>Minivan</option>
+            <option>Luxury</option>
+          </select>
+          <label>Additional Notes:</label>
+          <textarea name="notes"></textarea>
+          <button type="submit">Request Pickup</button>
+        </form>
+
+        <form
+          id="lost"
+          class="form-section"
+          action="lost-item-handler.php"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <label>Name:</label>
+          <input type="text" name="name" required />
+          <label>Lastname:</label>
+          <input type="text" name="lastname" required />
+          <label>Email:</label>
+          <input type="email" name="email" required />
+          <label>Phone Number:</label>
+          <input type="tel" name="phone" required />
+          <label>Preferred Time to Contact:</label>
+          <select name="preferred_time">
+            <option>Morning</option>
+            <option>Afternoon</option>
+            <option>After 5 PM</option>
+          </select>
+          <label>Reason for Contact:</label>
+          <select name="reason">
+            <option>Item left in room</option>
+            <option>Item lost in common area</option>
+            <option>Item lost during check-out</option>
+            <option>Other</option>
+          </select>
+          <label>Date of Stay:</label>
+          <input type="date" name="stay_date" required />
+          <label>Room Number:</label>
+          <input type="text" name="room_number" />
+          <label>Item Description:</label>
+          <textarea name="item_description" required></textarea>
+          <label>Attach Photo (optional):</label>
+          <input type="file" name="item_photo" accept="image/*" />
+          <label>Additional Comments:</label>
+          <textarea name="additional_info"></textarea>
+          <button type="submit">Submit Report</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="footer"></div>
+    <script>
+      fetch("footer.html")
+        .then((res) => res.text())
+        .then((data) => (document.getElementById("footer").innerHTML = data));
+    </script>
+  </body>
 </html>
