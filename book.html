@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/bookstyles.css">
 </head>
 <body>
+  
   <div id="header"></div>
   <script>
     fetch('header.html')
@@ -18,22 +19,22 @@
   <main >
     <div style="justify-content: center; text-align: center; border-radius: 15px; background-color: #ffde6561; margin-top: -50px;margin-bottom: -30px;">
         <h5 style="font-size: 2rem; color: #f8f8f8;">BOOK NOW</h5>
-      </div>  
+    </div>  
   </main>
 
   <div class="center">
       <div class="divform">
         <div class="title"><h1>Booking Form</h1></div>
-        <form method="POST">
+        <form method="POST" action="php/book_now.php">
 
             <label for="name">Name:</label><br>
             <input type="text" placeholder="Name" id="name" name="name" required><br>
 
             <label for="telefon">Telefon:</label><br>
-            <input type="tel" placeholder="+383 040-000-000" pattern="[+0-9]{1,15}" id="telefon" name="telefon" requred ><br>
-            
+            <input type="text" placeholder="+383 000-000-000" pattern="[+0-9]{1,15}" id="telefon" name="telefon" maxlength="15" required><br>
+
             <label for="email" >Email:</label><br>
-            <input type="text"  placeholder="Name@gmail.com" id="email" name="email" required><br>
+            <input type="email"  placeholder="Name@gmail.com" id="email" name="email" required><br>
             
             <label for="checkin">Check-in Date:</label><br>
             <input type="date" id="checkin" name="checkin" required><br>
@@ -49,8 +50,7 @@
             </select><br>
 
             <label for="cardnumber">Card Number:</label><br>
-            <input type="text" id="cardnumber" name="cardnumber" pattern="\d{16}" maxlength="16" required>
-
+            <input type="text" placeholder="xxxx xxxx xxxx xxxx" id="cardnumber" name="cardnumber" pattern="\d{16}" maxlength="16" required>
 
             <div style="text-align: center; margin:30px;">
               <button type="submit">Book Now</button>
@@ -59,14 +59,11 @@
       </div>
   </div>
 
-
-
-
   <div id="footer"></div>
   <script>
-     fetch('footer.html')  <!-- Fetch the footer HTML file -->
+     fetch('footer.html')
        .then(response => response.text())
        .then(data => document.getElementById('footer').innerHTML = data);
-   </script>
+  </script>
 </body>
 </html>
