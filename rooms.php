@@ -1,3 +1,43 @@
+
+<?php
+define("CURRENCY","$");
+class Room{
+  public $name;
+  public $price;
+  public $images;
+    public function __construct($name,$price,$images){
+      $this->name=$name;
+      $this->price=$price;
+      $this->images=$images;
+    }
+    public function displayRoom(){
+     echo" <div class='room'>";
+     echo "<h1 style='color: #f5c518; justify-content: center; text-align: center; padding: 20px;'>" . htmlspecialchars($this->name) . "</h1>";
+     echo "<div class='photo-gallery' style='margin-bottom: 10px;'>"; 
+
+     foreach ($this->images as $image) {
+      echo "<img src='foto/" . htmlspecialchars($image) . "' alt='" . htmlspecialchars($this->name) . "'>";
+  }
+
+  echo "</div>";
+  echo "<div style='text-align: center;'>";
+  echo "<a href='book.html'><button class='book-now-button' style='background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;'>Book Now</button></a>";
+  echo "<h3 style='color: #000000;'>Price: " . CURRENCY . number_format($this->price, 2) . " per night</h3>";
+  echo "</div></div>";
+
+    }
+}
+$rooms = [
+  new Room("Standard Room", 250, ["standard room1.jpg", "Aman_Amanpuri_Dining_2_0.webp", "standard room.jpg", "Aman_Amanpuri_Dining_7_0.webp"]),
+  new Room("Luxury Room", 1500, ["luxoryroom1.jpg", "luxoryroom2.jpg", "luxoryroom3.jpg", "luxoryroom4.jpg"]),
+  new Room("Private Villas", 900, ["villat1.jpg", "villat2.jpg", "villat3.jpg", "villat4.jpg"]),
+  new Room("Family Room", 750, ["familyroom1.jpg", "familyroom2.jpg", "familyroom3.jpg", "familyroom4.jpg"]),
+  new Room("Wellness Suite", 1250, ["wellnesssuite1.jpg", "wellnesssuite2.jpg", "wellnesssuite3.jpg", "wellnesssuite4.jpg"])
+];
+usort($rooms, function($a, $b) {
+  return $a->price - $b->price;
+});
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,8 +92,13 @@
       .then(res => res.text())
       .then(data => document.getElementById('header').innerHTML = data);
   </script>
-
-<div class="room">
+  
+  <?php
+  foreach ($rooms as $room) {
+      $room->displayRoom();
+  }
+  ?>
+<!-- <div class="room">
     <h1 style="color: #f5c518; justify-content: center; text-align: center; padding: 20px;"> Standard Room </h1>
     <div class="photo-gallery" style="margin-bottom: 10px;"> 
       <img src="foto/standard room1.jpg" alt="Amanpuri Resort 1">
@@ -139,7 +184,7 @@
     </a>
       <h3 style="color: #000000;">Price: $1250 per night</h3>
     </div>
-  </div>
+  </div> -->
 
   <div id="footer"></div>
   <script>
