@@ -58,7 +58,9 @@
         </form>
       </div>
   </div>
-
+<?php
+  include("php/book_now.php");
+?>
   <div id="footer"></div>
   <script>
      fetch('footer.html')

@@ -64,19 +64,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         body{
             background-color:black;
         }
-        h1{
-            color:white;
-            text-align: center;
-        }
-        p{
+        h1,p,a{
             color:white;
             text-align: center;
             margin-bottom:-10px;
-        }
-        a{
-            color:white;
-            text-align: center;
-            font-size: 1.5rem; 
+
         }
     </style>
 </head>
