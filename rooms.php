@@ -21,7 +21,7 @@ class Room{
 
   echo "</div>";
   echo "<div style='text-align: center;'>";
-  echo "<a href='book.html'><button class='book-now-button' style='background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;'>Book Now</button></a>";
+  echo "<a href='book.php'><button class='book-now-button' style='background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;'>Book Now</button></a>";
   echo "<h3 style='color: #000000;'>Price: " . CURRENCY . number_format($this->price, 2) . " per night</h3>";
   echo "</div></div>";
 

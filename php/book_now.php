@@ -44,6 +44,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $room = $_POST['room'];
     $cardnumber = $_POST['cardnumber'];
 
+    if(empty($name) || empty($telefon)  || empty($email)  || empty($checkin)  || empty($checkout) || empty($room )  || empty($cardnumber) ){
+        exit();
+        header("Location : ../book.php");
+    }
     echo "<h1>Booking Confirmed!</h1>";
 
     $k= new Client($name,$telefon,$email,$checkin,$checkout,$room,$cardnumber);
@@ -68,14 +72,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color:white;
             text-align: center;
             margin-bottom:-10px;
-
         }
     </style>
 </head>
 <body>
-        <a href="../index.html">Return HOME</a>
-      
-
+        <a style="font-size: 1.5rem;" href="../index.html">Return HOME</a>
 </body>
 </html>
 <?php   echo "<br><br>";var_dump($_POST);?>
