@@ -29,7 +29,7 @@
             <p>  Check-in Data:____$this->checkin ____</p><br>
             <p>  Check-out Data:____$this->checkout ____</p><br>
             <p> Room type:____$this->room ____</p><br>
-            <p> Card number:____$this->cardnumber ____</p><br>
+            <p> Card number:____ ".preg_replace('/\d{1}/', '*',$this->cardnumber,12)." ____</p><br>
             <p> Thank you for choosing ".self::HOTEL." .We’re excited to welcome you soon. 
             ";
         }
@@ -43,11 +43,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $checkout = $_POST['checkout'];
     $room = $_POST['room'];
     $cardnumber = $_POST['cardnumber'];
-
-    if(empty($name) || empty($telefon)  || empty($email)  || empty($checkin)  || empty($checkout) || empty($room )  || empty($cardnumber) ){
-        exit();
-        header("Location : ../book.php");
-    }
+    
+   
+        $today=date('Y-m-d');
+        switch(true){
+            case !preg_match("/^[a-zA-Z]+$/",$name):
+                exit("ERROR : INVALID name ( must contain only letters) <a style=\"font-size: 1.5rem;\" href=\"../book.php\">Return BOOK NOW</a> ");
+                break;
+            case !preg_match("/^[0-9]{7,15}$/",$telefon):
+                exit("ERROR : INVALID phone number ( must contain only numbers  [7 -15] ) <a style=\"font-size: 1.5rem;\" href=\"../book.php\">Return BOOK NOW</a>");
+                break;
+            case !preg_match("/@/",$email):
+                exit("ERROR : INVALID email ( must contain @ ) <a style=\"font-size: 1.5rem;\" href=\"../book.php\">Return BOOK NOW</a>");
+                break;
+            case $checkin<$today:
+                exit("ERROR : INVALID date ( book for tomorrow ) <a style=\"font-size: 1.5rem;\" href=\"../book.php\">Return BOOK NOW</a>");
+                break;
+            case $checkin>$checkout:
+                exit("ERROR : INVALID date ( check-out date )<a style=\"font-size: 1.5rem;\" href=\"../book.php\">Return BOOK NOW</a> ");
+                break;
+            case !preg_match("/^[0-9]{16}$/",$cardnumber):
+                exit("ERROR : INVALID card number ( must contain only 16 numbers)  <a style=\"font-size: 1.5rem;\" href=\"../book.php\">Return BOOK NOW</a>");
+                break;
+            }
     echo "<h1>Booking Confirmed!</h1>";
 
     $k= new Client($name,$telefon,$email,$checkin,$checkout,$room,$cardnumber);
@@ -55,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo $k;
 
 } else {
-    echo "<h1>No data received.</h1>";
+    echo "<h1>No data received.</h1><a style=\"font-size: 1.5rem;\" href=\"../book.php\">Return BOOK NOW</a>";
 }
 ?>
 <!DOCTYPE html>
