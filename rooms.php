@@ -10,6 +10,13 @@ class Room{
       $this->price=$price;
       $this->images=$images;
     }
+  
+  public function extraDetails() {
+    echo "<p class='room-detail'>" . "📶 Wifi"."</p>";
+}
+public function description(){
+
+}
     public function displayRoom(){
      echo" <div class='room'>";
      echo "<h1 style='color: #f5c518; justify-content: center; text-align: center; padding: 20px;'>" . htmlspecialchars($this->name) . "</h1>";
@@ -17,22 +24,134 @@ class Room{
 
      foreach ($this->images as $image) {
       echo "<img src='foto/" . htmlspecialchars($image) . "' alt='" . htmlspecialchars($this->name) . "'>";
-  }
-
+     }
   echo "</div>";
-  echo "<div style='text-align: center;'>";
-  echo "<a href='book.php'><button class='book-now-button' style='background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;'>Book Now</button></a>";
-  echo "<h3 style='color: #000000;'>Price: " . CURRENCY . number_format($this->price, 2) . " per night</h3>";
-  echo "</div></div>";
+
+  echo "<div class='room-details' style='display: flex; justify-content: space-between; align-items: center; padding: 0 20px;'>";
+  //left
+  echo "<div style='flex: 1; text-align: left;'>"; 
+$this->extraDetails(); 
+echo "</div>";
+//center
+echo "<div style='flex: 1; text-align: center;'>";
+$this->description();
+echo "</div>";
+//right
+echo "<div style='flex: 1; text-align: right;'>";
+echo "<h3 style='color: #000000;'>Price: " . CURRENCY . number_format($this->price, 2) . " per night</h3>";
+echo "<a href='book.php'><button class='book-now-button' style='background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;'>Book Now</button></a>";
+echo "</div>";
+
+echo "</div></div>";
 
     }
+}class StandardRoom extends Room {
+  public $tv;
+  public $bedSize;
+
+  public function __construct($name, $price, $images, $tv = true,$bedSize="Queen") {
+      parent::__construct($name, $price, $images);
+      $this->tv = $tv;
+      $this->bedSize=$bedSize;
+  }
+
+  public function extraDetails() {
+    parent::extraDetails();
+    echo "<p class='room-detail'>" . ($this->tv ? "📺" : "❌") . " TV</p>";
+    echo "<p class='room-detail'> 🛏️ Bed Size: " . $this->bedSize . "</p>";
+
+}
+public function description(){
+  echo "<p class='room-detail'>"."A warm and comfortable room for a pleasant stay. Equipped with Wi-Fi and TV for entertainment during your stay. Ideal for short getaways and excursions." ."</p>";
+}
+}
+
+class LuxuryRoom extends Room {
+  public $miniBar;
+  public $jacuzzi;
+
+  public function __construct($name, $price, $images,$miniBar = true, $jacuzzi = true) {
+      parent::__construct($name, $price, $images);
+      $this->miniBar = $miniBar;
+      $this->jacuzzi = $jacuzzi;
+  }
+
+  public function extraDetails() {
+    parent::extraDetails();
+    echo "<p class='room-detail'>" . ($this->miniBar ? "🍹" : "❌") . " Mini Bar</p>";
+    echo "<p class='room-detail'>" . ($this->jacuzzi ? "🛁" : "❌") . " Jacuzzi</p>";
+
+}
+public function description(){
+  echo "<p class='room-detail'>"."Designed for those seeking unparalleled luxury and comfort. This room offers stunning views, a minibar, and a private jacuzzi for a relaxing and unforgettable experience." ."</p>";
+}
+}
+
+class FamilyRoom extends Room {
+  public $numBeds;
+  public $kidFriendly;
+
+  public function __construct($name, $price, $images, $numBeds = 4, $kidFriendly = true) {
+    parent::__construct($name, $price, $images);
+    $this->numBeds = $numBeds;
+    $this->kidFriendly = $kidFriendly; 
+  }
+
+  public function extraDetails() {
+    parent::extraDetails();
+    echo "<p class='room-detail'>🛏️ Number of Beds: " . $this->numBeds . " </p>";
+    echo "<p class='room-detail'>" . ($this->kidFriendly ? "👶" : "❌") . " Kid Friendly</p>";
+
+}
+public function description(){
+  echo "<p class='room-detail'>"."A perfect room for families, offering spaciousness and plenty of beds. Kid-friendly and equipped with all the amenities to make your stay comfortable and enjoyable." ."</p>";
+}
+}
+class PrivateVillas extends Room {
+  public $privatePool;
+  public $butlerService;
+
+  public function __construct($name, $price, $images,$privatePool = true, $butlerService = true) {
+    parent::__construct($name, $price, $images);
+    $this->privatePool = $privatePool;
+    $this->butlerService = $butlerService;
+  }
+
+  public function extraDetails() {
+    parent::extraDetails();
+    echo "<p class='room-detail'>" . ($this->privatePool ? "🏊‍♂️" : "❌") . " Private Pool</p>";
+    echo "<p class='room-detail'>" . ($this->butlerService ? "🤵" : "❌") . " Butler Service</p>";
+  }
+  public function description(){
+    echo "<p class='room-detail'>"."For an exclusive experience, these private villas offer a private pool and butler service for all your needs. Ideal for those seeking privacy and luxury in one." ."</p>";
+  }
+}
+
+class WellnessSuite extends Room {
+  public $spaServices;
+  public $personalTrainer;
+
+  public function __construct($name, $price, $images,$spaServices = true, $personalTrainer = true) {
+    parent::__construct($name, $price, $images);
+    $this->spaServices = $spaServices;
+    $this->personalTrainer = $personalTrainer;
+  }
+
+  public function extraDetails() {
+    parent::extraDetails();
+    echo "<p class='room-detail'>" . ($this->spaServices ? "💆‍♀️" : "❌") . " Spa Services</p>";
+    echo "<p class='room-detail'>" . ($this->personalTrainer ? "💪" : "❌") . " Personal Trainer</p>";
+  }
+  public function description(){
+    echo "<p class='room-detail'>"."Relax and recharge in this wellness suite with spa services and the option for personal trainer treatments. Perfect for those looking for a rejuvenating experience." ."</p>";
+  }
 }
 $rooms = [
-  new Room("Standard Room", 250, ["standard room1.jpg", "Aman_Amanpuri_Dining_2_0.webp", "standard room.jpg", "Aman_Amanpuri_Dining_7_0.webp"]),
-  new Room("Luxury Room", 1500, ["luxoryroom1.jpg", "luxoryroom2.jpg", "luxoryroom3.jpg", "luxoryroom4.jpg"]),
-  new Room("Private Villas", 900, ["villat1.jpg", "villat2.jpg", "villat3.jpg", "villat4.jpg"]),
-  new Room("Family Room", 750, ["familyroom1.jpg", "familyroom2.jpg", "familyroom3.jpg", "familyroom4.jpg"]),
-  new Room("Wellness Suite", 1250, ["wellnesssuite1.jpg", "wellnesssuite2.jpg", "wellnesssuite3.jpg", "wellnesssuite4.jpg"])
+  new StandardRoom("Standard Room", 250, ["standard room1.jpg", "Aman_Amanpuri_Dining_2_0.webp", "standard room.jpg", "Aman_Amanpuri_Dining_7_0.webp"]),
+  new LuxuryRoom("Luxury Room", 1500, ["luxoryroom1.jpg", "luxoryroom2.jpg", "luxoryroom3.jpg", "luxoryroom4.jpg"]),
+  new FamilyRoom("Family Room", 750, ["familyroom1.jpg", "familyroom2.jpg", "familyroom3.jpg", "familyroom4.jpg"]),
+  new PrivateVillas("Private Villas", 900, ["villat1.jpg", "villat2.jpg", "villat3.jpg", "villat4.jpg"]),
+  new WellnessSuite("Wellness Suite", 1250, ["wellnesssuite1.jpg", "wellnesssuite2.jpg", "wellnesssuite3.jpg", "wellnesssuite4.jpg"]),
 ];
 usort($rooms, function($a, $b) {
   return $a->price - $b->price;
@@ -73,8 +192,17 @@ usort($rooms, function($a, $b) {
         border-radius: 20px; 
         margin-left: 20px; 
         margin-right: 20px;
-        height: 500px; /* Set your desired height */
-        margin-bottom:50px;
+        height: 535px; /* Set your desired height */
+        margin-bottom:25px;
+    }
+    .room-detail {
+  color: black;
+}
+.room-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
     }
   </style>
 </head>
