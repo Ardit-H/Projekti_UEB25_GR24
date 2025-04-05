@@ -8,12 +8,9 @@
     <link rel="stylesheet" href="css/contacts.css" />
   </head>
   <body>
-    <div id="header"></div>
-    <script>
-      fetch("header.html")
-        .then((res) => res.text())
-        .then((data) => (document.getElementById("header").innerHTML = data));
-    </script>
+  <?php 
+  include("header.php");
+  ?>
 
     <div class="">
       <div
@@ -199,12 +196,9 @@
       </div>
     </div>
 
-    <div id="footer"></div>
-    <script>
-      fetch("footer.html")
-        .then((res) => res.text())
-        .then((data) => (document.getElementById("footer").innerHTML = data));
-    </script>
+    <?php 
+  include("footer.php");
+  ?>
 
     <script>
       function switchForm(formId, event) {

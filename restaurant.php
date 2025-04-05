@@ -8,12 +8,9 @@
 
 </head>
 <body>
-  <div id="header"></div>
-  <script>
-    fetch('header.html')
-      .then(res => res.text())
-      .then(data => document.getElementById('header').innerHTML = data);
-  </script>
+<?php 
+  include("header.php");
+  ?>
 
   <main >
     <div style="justify-content: center; text-align: center; border-radius: 15px; background-color: #ffde6561; margin-top: -50px;margin-bottom: -30px;">
@@ -23,11 +20,8 @@
   
 
 
-   <div id="footer"></div>
-   <script>
-     fetch('footer.html')  <!-- Fetch the footer HTML file -->
-       .then(response => response.text())
-       .then(data => document.getElementById('footer').innerHTML = data);
-   </script>
+      <?php 
+  include("footer.php");
+  ?>
 </body>
 </html>
