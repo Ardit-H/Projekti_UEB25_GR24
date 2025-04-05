@@ -38,21 +38,44 @@
       <div class="form-container">
         <div class="center form-section active">
           <div class="form">
-            <form id="flight" action="" method="POST">
+            <form id="flight" action="php/submitRequest.php" method="POST">
               <label>Name:</label>
-              <input type="text" name="name" required />
+              <input type="text" name="name" placeholder="Name" required />
               <label>Lastname:</label>
-              <input type="text" name="lastname" required />
+              <input
+                type="text"
+                name="lastname"
+                placeholder="Lastname"
+                required
+              />
               <label>Email:</label>
-              <input type="email" name="email" required />
+              <input
+                type="email"
+                name="email"
+                placeholder="name@gmail.com"
+                required
+              />
               <label>Phone Number:</label>
-              <input type="tel" name="phone" required />
+              <input
+                type="tel"
+                name="phone"
+                placeholder="+383 33 456 231"
+                required
+              />
               <label>Flight Number:</label>
-              <input type="text" name="flight_number" required />
+              <input
+                type="text"
+                name="flight_number"
+                placeholder="1235"
+                minlength="1"
+                maxlength="4"
+                required
+              />
               <label>Arrival Date:</label>
               <input type="date" name="arrival_date" required />
               <label>Additional Notes:</label>
               <textarea name="notes"></textarea>
+              <input type="hidden" name="form_type" value="flight" />
               <button type="submit">Submit Flight Details</button>
             </form>
           </div>
@@ -60,21 +83,46 @@
 
         <div class="center form-section">
           <div class="form">
-            <form id="car" method="POST">
+            <form id="car" action="php/submitRequest.php" method="POST">
               <label>Name:</label>
-              <input type="text" name="name" required />
+              <input type="text" name="name" placeholder="Name" required />
               <label>Lastname:</label>
-              <input type="text" name="lastname" required />
+              <input
+                type="text"
+                name="lastname"
+                placeholder="Lastname"
+                required
+              />
               <label>Email:</label>
-              <input type="email" name="email" required />
+              <input
+                type="email"
+                name="email"
+                placeholder="name@gmail.com"
+                required
+              />
               <label>Phone Number:</label>
-              <input type="tel" name="phone" required />
+              <input
+                type="tel"
+                name="phone"
+                placeholder="+383 33 456 231"
+                required
+              />
               <label>Pickup Date & Time:</label>
               <input type="datetime-local" name="pickup_time" required />
               <label>Pickup Location:</label>
-              <input type="text" name="pickup_location" required />
+              <input
+                type="text"
+                name="pickup_location"
+                placeholder="Location"
+                required
+              />
               <label>Destination:</label>
-              <input type="text" name="destination" required />
+              <input
+                type="text"
+                name="destination"
+                placeholder="Destination"
+                required
+              />
               <label>Vehicle Preference:</label>
               <select name="vehicle">
                 <option>Sedan</option>
@@ -84,6 +132,7 @@
               </select>
               <label>Additional Notes:</label>
               <textarea name="notes"></textarea>
+              <input type="hidden" name="form_type" value="car" />
               <button type="submit">Request Pickup</button>
             </form>
           </div>
@@ -91,15 +140,30 @@
 
         <div class="center form-section">
           <div class="form">
-            <form id="lost" action="" method="POST">
+            <form id="lost" action="php/submitRequest.php" method="POST">
               <label>Name:</label>
-              <input type="text" name="name" required />
+              <input type="text" name="name" placeholder="Name" required />
               <label>Lastname:</label>
-              <input type="text" name="lastname" required />
+              <input
+                type="text"
+                name="lastname"
+                placeholder="Lastname"
+                required
+              />
               <label>Email:</label>
-              <input type="email" name="email" required />
+              <input
+                type="email"
+                name="email"
+                placeholder="name@gmail.com"
+                required
+              />
               <label>Phone Number:</label>
-              <input type="tel" name="phone" required />
+              <input
+                type="tel"
+                name="phone"
+                placeholder="+383 33 456 231"
+                required
+              />
               <label>Preferred Time to Contact:</label>
               <select name="preferred_time">
                 <option>Morning</option>
@@ -116,11 +180,18 @@
               <label>Date of Stay:</label>
               <input type="date" name="stay_date" required />
               <label>Room Number:</label>
-              <input type="text" name="room_number" />
+              <input
+                type="text"
+                name="room_number"
+                placeholder="231"
+                maxlength="3"
+                minlength="1"
+              />
               <label>Item Description:</label>
               <textarea name="item_description" required></textarea>
               <label>Additional Comments:</label>
               <textarea name="additional_info"></textarea>
+              <input type="hidden" name="form_type" value="lost" />
               <button type="submit">Submit Report</button>
             </form>
           </div>
