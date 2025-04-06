@@ -5,12 +5,16 @@ class Room{
   protected $name;
   public $price;
   protected $images;
-    public function __construct($name,$price,$images){
+  protected $rating;
+    public function __construct($name,$price,$images,$rating ){
       $this->name=$name;
       $this->price=$price;
       $this->images=$images;
+      $this->rating = $rating;
     }
-  
+    public function getRating() {
+      return $this->rating;
+  }
   protected function extraDetails() {
     echo "<p class='room-detail'>" . "📶 Wifi"."</p>";
 }
@@ -38,7 +42,8 @@ $this->description();
 echo "</div>";
 //right
 echo "<div style='flex: 1; text-align: right;'>";
-echo "<h3 style='color: #000000;'>Price: " . CURRENCY . number_format($this->price, 2) . " per night</h3>";
+echo "<p class='rating' >Rating: " . $this->rating . "★</p>";
+echo "<h3 class='price'>Price: " . CURRENCY . number_format($this->price, 2) . " per night</h3>";
 echo "<a href='book.php'><button class='book-now-button' style='background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;'>". strtoupper("Book Now") ."</button></a>";
 echo "</div>";
 
@@ -49,8 +54,8 @@ echo "</div></div>";
   private $tv;
   private $bedSize;
 
-  public function __construct($name, $price, $images, $tv = true,$bedSize="Queen") {
-      parent::__construct($name, $price, $images);
+  public function __construct($name, $price, $images,$rating, $tv = true,$bedSize="Queen") {
+      parent::__construct($name, $price, $images,$rating);
       $this->tv = $tv;
       $this->bedSize=$bedSize;
   }
@@ -70,8 +75,8 @@ class LuxuryRoom extends Room {
   private $miniBar;
   private $jacuzzi;
 
-  public function __construct($name, $price, $images,$miniBar = true, $jacuzzi = true) {
-      parent::__construct($name, $price, $images);
+  public function __construct($name, $price, $images,$rating,$miniBar = true, $jacuzzi = true) {
+      parent::__construct($name, $price, $images,$rating);
       $this->miniBar = $miniBar;
       $this->jacuzzi = $jacuzzi;
   }
@@ -91,8 +96,8 @@ class FamilyRoom extends Room {
   private $numBeds;
   private $kidFriendly;
 
-  public function __construct($name, $price, $images, $numBeds = 4, $kidFriendly = true) {
-    parent::__construct($name, $price, $images);
+  public function __construct($name, $price, $images,$rating,$numBeds = 4, $kidFriendly = true) {
+    parent::__construct($name, $price, $images,$rating);
     $this->numBeds = $numBeds;
     $this->kidFriendly = $kidFriendly; 
   }
@@ -111,8 +116,8 @@ class PrivateVillas extends Room {
   private $privatePool;
   private $butlerService;
 
-  public  function __construct($name, $price, $images,$privatePool = true, $butlerService = true) {
-    parent::__construct($name, $price, $images);
+  public  function __construct($name, $price, $images,$rating,$privatePool = true, $butlerService = true) {
+    parent::__construct($name, $price, $images,$rating);
     $this->privatePool = $privatePool;
     $this->butlerService = $butlerService;
   }
@@ -131,8 +136,8 @@ class WellnessSuite extends Room {
   private $spaServices;
   private $personalTrainer;
 
-  public  function __construct($name, $price, $images,$spaServices = true, $personalTrainer = true) {
-    parent::__construct($name, $price, $images);
+  public  function __construct($name, $price, $images,$rating,$spaServices = true, $personalTrainer = true) {
+    parent::__construct($name, $price, $images,$rating);
     $this->spaServices = $spaServices;
     $this->personalTrainer = $personalTrainer;
   }
@@ -147,15 +152,28 @@ class WellnessSuite extends Room {
   }
 }
 $rooms = [
-  new StandardRoom("Standard Room", 250, ["standard room1.jpg", "Aman_Amanpuri_Dining_2_0.webp", "standard room.jpg", "Aman_Amanpuri_Dining_7_0.webp"]),
-  new LuxuryRoom("Luxury Room", 1500, ["luxoryroom1.jpg", "luxoryroom2.jpg", "luxoryroom3.jpg", "luxoryroom4.jpg"]),
-  new FamilyRoom("Family Room", 750, ["familyroom1.jpg", "familyroom2.jpg", "familyroom3.jpg", "familyroom4.jpg"]),
-  new PrivateVillas("Private Villas", 900, ["villat1.jpg", "villat2.jpg", "villat3.jpg", "villat4.jpg"]),
-  new WellnessSuite("Wellness Suite", 1250, ["wellnesssuite1.jpg", "wellnesssuite2.jpg", "wellnesssuite3.jpg", "wellnesssuite4.jpg"]),
+  new StandardRoom("Standard Room", 250, ["standard room1.jpg", "Aman_Amanpuri_Dining_2_0.webp", "standard room.jpg", "Aman_Amanpuri_Dining_7_0.webp"],4),
+  new LuxuryRoom("Luxury Room", 1500, ["luxoryroom1.jpg", "luxoryroom2.jpg", "luxoryroom3.jpg", "luxoryroom4.jpg"],5),
+  new FamilyRoom("Family Room", 750, ["familyroom1.jpg", "familyroom2.jpg", "familyroom3.jpg", "familyroom4.jpg"],3),
+  new PrivateVillas("Private Villas", 900, ["villat1.jpg", "villat2.jpg", "villat3.jpg", "villat4.jpg"],5),
+  new WellnessSuite("Wellness Suite", 1250, ["wellnesssuite1.jpg", "wellnesssuite2.jpg", "wellnesssuite3.jpg", "wellnesssuite4.jpg"],4),
 ];
 usort($rooms, function($a, $b) {
   return $a->price - $b->price;
 });
+if (isset($_GET['filter'])) {
+  $filter = $_GET['filter'];
+
+  if ($filter == 'price') {
+      usort($rooms, function($a, $b) {
+          return $a->price - $b->price;
+      });
+  } elseif ($filter == 'rating') {
+      usort($rooms, function($a, $b) {
+          return $b->getRating() - $a->getRating(); // Rendit sipas rating-ut (nga më i larti)
+      });
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -204,10 +222,38 @@ usort($rooms, function($a, $b) {
       align-items: center;
       padding: 0 20px;
     }
-  </style>
+    .rating{
+      margin-bottom: 5px;
+      color: #000000;
+    }
+    .price{
+      margin-top:5px;
+      margin-bottom: 9px;
+      color: #000000;
+    }
+     input[type="submit"] {
+      background-color: #e4b00f;
+        border-radius: 5px;
+        border: 1px solid #000000;
+    }
+    select{
+      border-radius: 5px;
+    }
+     input[type="submit"]:hover {
+      background-color: rgb(255, 255, 255); /* Darker shade of yellow */
+      transform: scale(1.05); /* Slightly enlarge the button */
+      transition: all 0.3s ease-out; /* Smooth transition */
+    }
+    /* Filter section background */
+    .filter-section {
+        border-radius: 15px;
+        padding: 10px;
+        margin-bottom: 30px;
+    }
+    </style>
 </head>
 <body>
-    <?php 
+  <?php 
       include("header.php");
       ?>
   <main>
@@ -215,12 +261,20 @@ usort($rooms, function($a, $b) {
       <h5 style="font-size: 2rem; color: #f8f8f8;">ROOMS</h5>
     </div>
   </main>
-
+  
+  <form method="GET" action="">
+    <label for="filter">Filter by:</label>
+    <select name="filter" id="filter">
+        <option value="price" <?php if (isset($_GET['filter']) && $_GET['filter'] == 'price') echo 'selected'; ?>>Price</option>
+        <option value="rating" <?php if (isset($_GET['filter']) && $_GET['filter'] == 'rating') echo 'selected'; ?>>Rating</option>
+    </select>
+    <input type="submit" value="Apply Filter">
+  </form>
   
   
   <?php
   foreach ($rooms as $room) {
-      $room->displayRoom();
+    $room->displayRoom();
   }
   ?>
 <!-- <div class="room">
@@ -310,7 +364,6 @@ usort($rooms, function($a, $b) {
       <h3 style="color: #000000;">Price: $1250 per night</h3>
     </div>
   </div> -->
-
   <?php 
   include("footer.php");
   ?>
