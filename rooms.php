@@ -2,19 +2,19 @@
 <?php
 define("CURRENCY","$");
 class Room{
-  public $name;
+  protected $name;
   public $price;
-  public $images;
+  protected $images;
     public function __construct($name,$price,$images){
       $this->name=$name;
       $this->price=$price;
       $this->images=$images;
     }
   
-  public function extraDetails() {
+  protected function extraDetails() {
     echo "<p class='room-detail'>" . "📶 Wifi"."</p>";
 }
-public function description(){
+protected function description(){
 
 }
     public function displayRoom(){
@@ -46,8 +46,8 @@ echo "</div></div>";
 
     }
 }class StandardRoom extends Room {
-  public $tv;
-  public $bedSize;
+  private $tv;
+  private $bedSize;
 
   public function __construct($name, $price, $images, $tv = true,$bedSize="Queen") {
       parent::__construct($name, $price, $images);
@@ -55,20 +55,20 @@ echo "</div></div>";
       $this->bedSize=$bedSize;
   }
 
-  public function extraDetails() {
+  protected function extraDetails() {
     parent::extraDetails();
     echo "<p class='room-detail'>" . ($this->tv ? "📺" : "❌") . " TV</p>";
     echo "<p class='room-detail'> 🛏️ Bed Size: " . $this->bedSize . "</p>";
 
 }
-public function description(){
+protected function description(){
   echo "<p class='room-detail'>"."A warm and comfortable room for a pleasant stay. Equipped with Wi-Fi and TV for entertainment during your stay. Ideal for short getaways and excursions." ."</p>";
 }
 }
 
 class LuxuryRoom extends Room {
-  public $miniBar;
-  public $jacuzzi;
+  private $miniBar;
+  private $jacuzzi;
 
   public function __construct($name, $price, $images,$miniBar = true, $jacuzzi = true) {
       parent::__construct($name, $price, $images);
@@ -76,20 +76,20 @@ class LuxuryRoom extends Room {
       $this->jacuzzi = $jacuzzi;
   }
 
-  public function extraDetails() {
+  protected function extraDetails() {
     parent::extraDetails();
     echo "<p class='room-detail'>" . ($this->miniBar ? "🍹" : "❌") . " Mini Bar</p>";
     echo "<p class='room-detail'>" . ($this->jacuzzi ? "🛁" : "❌") . " Jacuzzi</p>";
 
 }
-public function description(){
+protected function description(){
   echo "<p class='room-detail'>"."Designed for those seeking unparalleled luxury and comfort. This room offers stunning views, a minibar, and a private jacuzzi for a relaxing and unforgettable experience." ."</p>";
 }
 }
 
 class FamilyRoom extends Room {
-  public $numBeds;
-  public $kidFriendly;
+  private $numBeds;
+  private $kidFriendly;
 
   public function __construct($name, $price, $images, $numBeds = 4, $kidFriendly = true) {
     parent::__construct($name, $price, $images);
@@ -97,52 +97,52 @@ class FamilyRoom extends Room {
     $this->kidFriendly = $kidFriendly; 
   }
 
-  public function extraDetails() {
+  protected function extraDetails() {
     parent::extraDetails();
     echo "<p class='room-detail'>🛏️ Number of Beds: " . $this->numBeds . " </p>";
     echo "<p class='room-detail'>" . ($this->kidFriendly ? "👶" : "❌") . " Kid Friendly</p>";
 
 }
-public function description(){
+protected function description(){
   echo "<p class='room-detail'>"."A perfect room for families, offering spaciousness and plenty of beds. Kid-friendly and equipped with all the amenities to make your stay comfortable and enjoyable." ."</p>";
 }
 }
 class PrivateVillas extends Room {
-  public $privatePool;
-  public $butlerService;
+  private $privatePool;
+  private $butlerService;
 
-  public function __construct($name, $price, $images,$privatePool = true, $butlerService = true) {
+  public  function __construct($name, $price, $images,$privatePool = true, $butlerService = true) {
     parent::__construct($name, $price, $images);
     $this->privatePool = $privatePool;
     $this->butlerService = $butlerService;
   }
 
-  public function extraDetails() {
+  protected function extraDetails() {
     parent::extraDetails();
     echo "<p class='room-detail'>" . ($this->privatePool ? "🏊‍♂️" : "❌") . " Private Pool</p>";
     echo "<p class='room-detail'>" . ($this->butlerService ? "🤵" : "❌") . " Butler Service</p>";
   }
-  public function description(){
+  protected function description(){
     echo "<p class='room-detail'>"."For an exclusive experience, these private villas offer a private pool and butler service for all your needs. Ideal for those seeking privacy and luxury in one." ."</p>";
   }
 }
 
 class WellnessSuite extends Room {
-  public $spaServices;
-  public $personalTrainer;
+  private $spaServices;
+  private $personalTrainer;
 
-  public function __construct($name, $price, $images,$spaServices = true, $personalTrainer = true) {
+  public  function __construct($name, $price, $images,$spaServices = true, $personalTrainer = true) {
     parent::__construct($name, $price, $images);
     $this->spaServices = $spaServices;
     $this->personalTrainer = $personalTrainer;
   }
 
-  public function extraDetails() {
+  protected function extraDetails() {
     parent::extraDetails();
     echo "<p class='room-detail'>" . ($this->spaServices ? "💆‍♀️" : "❌") . " Spa Services</p>";
     echo "<p class='room-detail'>" . ($this->personalTrainer ? "💪" : "❌") . " Personal Trainer</p>";
   }
-  public function description(){
+  protected function description(){
     echo "<p class='room-detail'>"."Relax and recharge in this wellness suite with spa services and the option for personal trainer treatments. Perfect for those looking for a rejuvenating experience." ."</p>";
   }
 }
