@@ -170,7 +170,7 @@ if (isset($_GET['filter'])) {
       });
   } elseif ($filter == 'rating') {
       usort($rooms, function($a, $b) {
-          return $b->getRating() - $a->getRating(); // Rendit sipas rating-ut (nga më i larti)
+          return $b->getRating() - $a->getRating(); 
       });
   }
 }
@@ -240,10 +240,10 @@ if (isset($_GET['filter'])) {
       border-radius: 5px;
     }
      input[type="submit"]:hover {
-      background-color: rgb(255, 255, 255); /* Darker shade of yellow */
-      transform: scale(1.05); /* Slightly enlarge the button */
-      transition: all 0.3s ease-out; /* Smooth transition */
-    }
+      background-color: rgb(255, 255, 255); 
+      transform: scale(1.05); 
+      transition: all 0.3s ease-out; 
+     }
     /* Filter section background */
     .filter-section {
         border-radius: 15px;
