@@ -56,7 +56,9 @@
               <input
                 type="tel"
                 name="phone"
-                placeholder="+383 33 456 231"
+                placeholder="+383 000-000-000"
+                pattern="[+0-9]{1,15}"
+                maxlength="15"
                 required
               />
               <label>Flight Number:</label>
@@ -101,7 +103,9 @@
               <input
                 type="tel"
                 name="phone"
-                placeholder="+383 33 456 231"
+                placeholder="+383 000-000-000"
+                pattern="[+0-9]{1,15}"
+                maxlength="15"
                 required
               />
               <label>Pickup Date & Time:</label>
@@ -158,7 +162,9 @@
               <input
                 type="tel"
                 name="phone"
-                placeholder="+383 33 456 231"
+                placeholder="+383 000-000-000"
+                pattern="[+0-9]{1,15}"
+                maxlength="15"
                 required
               />
               <label>Preferred Time to Contact:</label>
