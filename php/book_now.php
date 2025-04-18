@@ -8,6 +8,13 @@
         private $checkout;
         private $room;
         private $cardnumber;
+        private $roomPrices = [
+            'Standard Room' => 250,
+            'Family Room' => 750,
+            'Private Villas' => 900,
+            'Wellness Suite' => 1250,
+            'Luxury Room' => 1500
+        ];
         public function __construct($name,$telefon,$email,$checkin,$checkout,$room,$cardnumber){
             $this->name=$name;
             $this->telefon=$telefon;
@@ -20,7 +27,24 @@
         public function __destruct(){
             echo "<h1> Have a nice day!!</h1>";
         }
+        public function calculateTotalPrice() {
+            $pricePerNight = $this->roomPrices[$this->room] ?? 0;
+            
+            // Calculate the number of nights
+            $checkinDate = new DateTime($this->checkin);
+            $checkoutDate = new DateTime($this->checkout);
+            $interval = $checkinDate->diff($checkoutDate);
+            
+            $numOfDays = $interval->days;
+    
+            if ($numOfDays <= 0) {
+                return 0;
+            }
+            
+            return $numOfDays * $pricePerNight;
+        }
         public function __toString(){
+            $price=$this->calculateTotalPrice();
             return"
             <br>
             <p> Name:____$this->name ____</p><br>
@@ -30,8 +54,8 @@
             <p>  Check-out Data:____$this->checkout ____</p><br>
             <p> Room type:____$this->room ____</p><br>
             <p> Card number:____ ".preg_replace('/\d{1}/', '*',$this->cardnumber,12)." ____</p><br>
-            <p> Thank you for choosing ".self::HOTEL." .We’re excited to welcome you soon. 
-            ";
+            <p> Thank you for choosing ".self::HOTEL." .We’re excited to welcome you soon. <\p><br>
+            <P style=\"color: green; font-size: 1.2rem;\"> Çmimi total  $  $price <br>";    
         }
     }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -50,10 +74,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             case !preg_match("/^[a-zA-Z]+$/",$name):
                 exit("ERROR : INVALID name ( must contain only letters) <a style=\"font-size: 1.5rem;\" href=\"../book.php\">Return BOOK NOW</a> ");
                 break;
-            case !preg_match("/^[0-9]{7,15}$/",$telefon):
-                exit("ERROR : INVALID phone number ( must contain only numbers  [7 -15] ) <a style=\"font-size: 1.5rem;\" href=\"../book.php\">Return BOOK NOW</a>");
-                break;
-            case !preg_match("/@/",$email):
+            case !preg_match("/^([+-]?\d{3}[- ])?\d{3}[- ]?\d{3}[- ]?\d{3}$/",$telefon):
+                exit("ERROR !!!!! : INVALID phone number <a style=\"font-size: 1.5rem;\" href=\"../book.php\">Return BOOK NOW</a>");
+                break; 
+            case !preg_match('/^[A-Za-z0-9_\.\-]+?@[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-\.]+$/',$email):
                 exit("ERROR : INVALID email ( must contain @ ) <a style=\"font-size: 1.5rem;\" href=\"../book.php\">Return BOOK NOW</a>");
                 break;
             case $checkin<$today:
