@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    
         $today=date('Y-m-d');
         switch(true){
-            case !preg_match("/^[a-zA-Z]+$/",$name):
+            case !preg_match("/^[a-zA-Z ]+$/",$name):
                 exit("ERROR : INVALID name ( must contain only letters) <a style=\"font-size: 1.5rem;\" href=\"../book.php\">Return BOOK NOW</a> ");
                 break;
             case !preg_match("/^([+-]?\d{3}[- ])?\d{3}[- ]?\d{3}[- ]?\d{3}$/",$telefon):

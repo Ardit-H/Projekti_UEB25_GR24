@@ -44,7 +44,7 @@ echo "</div>";
 echo "<div style='flex: 1; text-align: right;'>";
 echo "<p class='rating' >Rating: " . $this->rating . "★</p>";
 echo "<h3 class='price'>Price: " . CURRENCY . number_format($this->price, 2) . " per night</h3>";
-echo "<a href=\book.php?room=$this->name \"><button class='book-now-button' style='background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;'>". strtoupper("Book Now") ."</button></a>";
+echo "<a href=\"book.php?room=$this->name \"><button class='book-now-button' style='background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;'>". strtoupper("Book Now") ."</button></a>";
 echo "</div>";
 
 echo "</div></div>";
