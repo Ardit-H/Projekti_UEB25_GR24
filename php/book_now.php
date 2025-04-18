@@ -118,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
 </head>
 <body>
-        <a style="font-size: 1.5rem;" href="../index.html">Return HOME</a>
+        <a style="font-size: 1.5rem;" href="../index.php">Return HOME</a>
 </body>
 </html>
 <?php   echo "<br><br>";var_dump($_POST);?>
