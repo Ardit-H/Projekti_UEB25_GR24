@@ -52,6 +52,13 @@
       <img src="foto/Restaurant7.jpg" alt="Restaurant">
       <img src="foto/Restaurant8.jpg" alt="Restaurant">
   </div>
+  <div style="color: #f5c518;justify-content: center; text-align: center;"><h1> Our Outdoor Dining Area</h1></div>
+    <div class="photo" style="margin-bottom: 100px; ">
+      <img src="foto/Terrace2.jpg" alt="Terrace">
+      <img src="foto/Terrace3.jpg" alt="Terrace">
+      <img src="foto/Terrace6.jpg" alt="Terrace">
+      <img src="foto/Terrace7.jpg" alt="Terrace">
+  </div>
 
       <?php 
   include("footer.php");
