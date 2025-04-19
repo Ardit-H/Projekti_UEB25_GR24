@@ -146,6 +146,42 @@
       </div>
   </div>
 
+  <div style="text-align:center; margin: 80px auto; background-color: #ffffff10; padding: 30px; width:60%; border-radius: 15px;">
+    <h2>Reserve a Table</h2>
+    <form method="POST" action="" style="display:flex; flex-direction:column; gap:15px;">
+      <input type="text" name="name" placeholder="Your name" required>
+      <input type="text" name="email" placeholder="Email Address" required>
+      <input type="text" name="phone" placeholder="Phone number" required>
+      <input type="date" name="date" required>
+      <input type="time" name="time" required>
+      <input type="number" name="people" placeholder="Number of people" min="1" max="20" required>
+      <button type="submit" name="submit" style="padding: 10px 20px; background-color: #f5c518; color: white; border:none; border-radius:5px;">Book now</button>
+  </div>
+  <?php
+  if(isset($_POST['submit'])){
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $date = $_POST['date'];
+    $time = $_POST['time'];
+    $people = $_POST['people'];
+
+    if(!preg_match("/^[a-zA-Z\s]+$/", $name)){
+      echo "<p style='color:red; text-align:center;'>❌ Name is not valid. Use letters only.</p> ";
+    } else if(!preg_match("/^[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}$/", $email)){
+      echo "<p style='color:red; text-align: center;'>❌ Invalid email format. </p>";
+    } else if(!preg_match("/^[0-9]{8,14}$/", $phone)){
+      echo "<p style='color:red; text-align:center;'>❌ Invalid phone number. </p>";
+    } else if(empty($date) || empty($time)){
+      echo "<p style='color:red; text-align:center;'>❌ Date and time are required. </p>";
+    } else if(!preg_match("/^[1-9][0-9]*$/" , $people ) || $people > 20){
+      echo "<p style='color:red; text-align: center;'>❌ Please enter a valid number of people (1-20). </p>";
+    } else {
+      echo "<p style='color:green; text-align:center;'>✅ Reservation received for <strong>$people person(s) </strong> on <strong>$date</strong> at <strong>$time</strong>!<br>
+      We'll contact you soon. </p>";
+    }
+  }
+  ?>
       <?php 
   include("footer.php");
   ?>
