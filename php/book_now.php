@@ -30,7 +30,6 @@
         public function calculateTotalPrice() {
             $pricePerNight = $this->roomPrices[$this->room] ?? 0;
             
-            // Calculate the number of nights
             $checkinDate = new DateTime($this->checkin);
             $checkoutDate = new DateTime($this->checkout);
             $interval = $checkinDate->diff($checkoutDate);
