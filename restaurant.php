@@ -59,6 +59,92 @@
       <img src="foto/Terrace6.jpg" alt="Terrace">
       <img src="foto/Terrace7.jpg" alt="Terrace">
   </div>
+  <div style="color: #f5c518;justify-content: center; text-align: center;"><h1> Our Indoor Dining Area</h1></div>
+    <div class="photo" style="margin-bottom: 100px; ">
+      <img src="foto/Terrace1.png" alt="Terrace">
+      <img src="foto/Terrace4.jpg" alt="Terrace">
+      <img src="foto/Terrace5.jpg" alt="Terrace">
+      <img src="foto/Terrace8.jpg" alt="Terrace">
+  </div>
+   <?php 
+   $totalMeals = 100;
+   $seafood = 30;
+   $meat = 20;
+   $sushi = 20;
+   $burgers = 18;
+   $pizza = 12;
+
+   $seafoodpercent = ($seafood / $totalMeals) * 100;
+   $meatpercent = ($meat / $totalMeals) * 100;
+   $sushipercent = ($sushi / $totalMeals) * 100;
+   $burgerspercent = ($burgers / $totalMeals) * 100;
+   $pizzapercent = ($pizza / $totalMeals) * 100;
+   ?>
+
+   <style>
+    .menu-breakdown{
+      width: 80%;
+      max-width: 600px;
+      margin: 60px auto;
+      /* background-color:#ffffff0d; */
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgda(0,0,0,0.2);
+      color: #f5c518;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .menu-breakdown h3{
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+    }
+    .category{
+      display: flex;
+      justify-content: space-between;
+      align-items:center;
+      background-color:#333;
+      border-radius: 50px;
+      padding: 12px 20px;
+      margin: 10px 0;
+      font-size: 1.1rem;
+      animation: fadeIn 1s ease-in;
+    }
+    .category span{
+      font-weight: bold;
+    }
+    .icon{
+      font-size: 1.3rem;
+      margin-right:10px;
+    }
+
+    @keyframes fadeIn{
+      from{ opacity: 0; transform: translateY(20px);}
+      to{ opacity: 1; transform: translateY(0);}
+    }
+    </style>
+    <div class="menu-breakdown">
+      <h3>🍽️ Menu Breakdown by Category</h3>
+      <div class="category">
+        <div><span class="icon">🐟</span>Seafood</div>
+        <span><?php echo round($seafoodpercent); ?>%</span>
+      </div>
+      <div class="category">
+        <div><span class="icon">🥩</span>Meat</div>
+        <span><?php echo round($meatpercent); ?>%</span>
+      </div>
+      <div class="category">
+        <div><span class="icon">🍣</span>Sushi</div>
+        <span><?php echo round($sushipercent); ?>%</span>
+      </div>
+      <div class="category">
+        <div><span class="icon">🍔</span>Burgers</div>
+        <span><?php echo round($burgerspercent); ?>%</span>
+      </div>
+      <div class="category">
+        <div><span class="icon">🍕</span>Pizza</div>
+        <span><?php echo round($pizzapercent); ?>%</span>
+      </div>
+  </div>
 
       <?php 
   include("footer.php");
