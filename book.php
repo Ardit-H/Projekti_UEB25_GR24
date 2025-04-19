@@ -82,7 +82,7 @@
             </select><br>
 
             <label for="cardnumber">Card Number:</label><br>
-            <input type="text" placeholder="xxxx xxxx xxxx xxxx" id="cardnumber" name="cardnumber" pattern="\d{16}" maxlength="16" required>
+            <input type="text" placeholder="XXXXYYYYZZZZEEEE" id="cardnumber" name="cardnumber" pattern="\d{16}" maxlength="16" required>
             
             <div id="totalPrice" style="font-weight: bold; margin-top: 10px;color:green;height: 30px; font-size: 1.2rem;"></div>
             <div style="text-align: center; margin:30px; ">

@@ -30,7 +30,6 @@
         public function calculateTotalPrice() {
             $pricePerNight = $this->roomPrices[$this->room] ?? 0;
             
-            // Calculate the number of nights
             $checkinDate = new DateTime($this->checkin);
             $checkoutDate = new DateTime($this->checkout);
             $interval = $checkinDate->diff($checkoutDate);
@@ -50,11 +49,11 @@
             <p> Name:____$this->name ____</p><br>
             <p> Telefon:____$this->telefon ____</p><br>
             <p> Email:____$this->email ____</p><br>
-            <p>  Check-in Data:____$this->checkin ____</p><br>
-            <p>  Check-out Data:____$this->checkout ____</p><br>
+            <p> Check-in Data:____$this->checkin ____</p><br>
+            <p> Check-out Data:____$this->checkout ____</p><br>
             <p> Room type:____$this->room ____</p><br>
-            <p> Card number:____ ".preg_replace('/\d{1}/', '*',$this->cardnumber,12)." ____</p><br>
-            <p> Thank you for choosing ".self::HOTEL." .We’re excited to welcome you soon. <\p><br>
+            <p> Card number:____ ".preg_replace('/\d{1}/', '*',$this->cardnumber,8)." ____</p><br>
+            <p> Thank you for choosing ".self::HOTEL." .We’re excited to welcome you soon. <br>
             <P style=\"color: green; font-size: 1.2rem;\"> Çmimi total  $  $price <br>";    
         }
     }
@@ -90,7 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit("ERROR : INVALID card number ( must contain only 16 numbers)  <a style=\"font-size: 1.5rem;\" href=\"../book.php\">Return BOOK NOW</a>");
                 break;
             }
-    echo "<h1>Booking Confirmed!</h1>";
+            $cardnumber = preg_replace('/(\d{4})(?=\d)/', '$1 ', $cardnumber);    
+            echo "<h1>Booking Confirmed!</h1>";
 
     $k= new Client($name,$telefon,$email,$checkin,$checkout,$room,$cardnumber);
 
