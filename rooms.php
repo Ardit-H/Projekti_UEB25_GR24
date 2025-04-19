@@ -24,13 +24,13 @@ protected function description(){
     public function displayRoom(){
      echo" <div class='room'>";
      echo "<h1 style='color: #f5c518; justify-content: center; text-align: center; padding: 20px;'>" . htmlspecialchars($this->name) . "</h1>";
-     echo "<div class='photo-gallery' style='margin-bottom: 10px;'>"; 
+  //    echo "<div class='photo-gallery' style='margin-bottom: 10px;'>"; 
 
-     foreach ($this->images as $image) {
-      echo "<img src='foto/" . htmlspecialchars($image) . "' alt='" . htmlspecialchars($this->name) . "'>";
-     }
-  echo "</div>";
-
+  //    foreach ($this->images as $image) {
+  //     echo "<img src='foto/" . htmlspecialchars($image) . "' alt='" . htmlspecialchars($this->name) . "'>";
+  //    }
+  // echo "</div>";
+      $this->displayPhotos();
   echo "<div class='room-details' style='display: flex; justify-content: space-between; align-items: center; padding: 0 20px;'>";
   //left
   echo "<div style='flex: 1; text-align: left;'>"; 
@@ -49,6 +49,13 @@ echo "</div>";
 
 echo "</div></div>";
 
+    }
+    protected function displayPhotos() {
+      echo "<div class='photo-gallery' style='margin-bottom: 10px;'>";
+      foreach ($this->images as $image) {
+         echo "<img src='foto/" . htmlspecialchars($image) . "' alt='" . htmlspecialchars($this->name) . "' style='cursor:pointer;' />";
+      }
+      echo "</div>";
     }
 }class StandardRoom extends Room {
   private $tv;
@@ -198,8 +205,12 @@ if (isset($_GET['filter'])) {
       border-radius: 10px;
       border: 5px solid #f5c518;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow around images */
+      cursor: pointer;
+            transition: transform 0.3s ease;
     }
-
+    .photo-gallery img:hover {
+            transform: scale(1.05);
+        }
     .book-now-button:hover {
       background-color: #e4b00f; /* Darker shade of yellow */
       transform: scale(1.05); /* Slightly enlarge the button */
@@ -250,6 +261,40 @@ if (isset($_GET['filter'])) {
         padding: 10px;
         margin-bottom: 30px;
     }
+    .modal-backdrop {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .modal-img {
+            max-width: 85%;
+            max-height: 85%;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            animation: zoomIn 0.4s ease;
+        }
+        .close-btn {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 36px;
+            color: white;
+            cursor: pointer;
+            z-index: 10000;
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
     </style>
 </head>
 <body>
@@ -367,5 +412,25 @@ if (isset($_GET['filter'])) {
   <?php 
   include("footer.php");
   ?>
+ <script>
+    document.querySelectorAll('.photo-gallery img').forEach(img => {
+        img.addEventListener('click', function () {
+            const modal = document.createElement("div");
+            modal.className = "modal-backdrop";
+            modal.innerHTML = `
+                <span class="close-btn">&times;</span>
+                <img src="${this.src}" class="modal-img" />
+            `;
+            document.body.appendChild(modal);
+
+            // Mbyll kur klikon jashtë imazhit
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal || e.target.classList.contains('close-btn')) {
+                    modal.remove();
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>
