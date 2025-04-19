@@ -38,7 +38,7 @@
             <form id="flight" action="php/submitRequest.php" method="POST">
               <label>Name:</label>
               <input type="text" name="name" placeholder="Name" required />
-              <label>Lastname:</label>
+              <label>Last Name:</label>
               <input
                 type="text"
                 name="lastname"
@@ -85,7 +85,7 @@
             <form id="car" action="php/submitRequest.php" method="POST">
               <label>Name:</label>
               <input type="text" name="name" placeholder="Name" required />
-              <label>Lastname:</label>
+              <label>Last Name:</label>
               <input
                 type="text"
                 name="lastname"
@@ -144,7 +144,7 @@
             <form id="lost" action="php/submitRequest.php" method="POST">
               <label>Name:</label>
               <input type="text" name="name" placeholder="Name" required />
-              <label>Lastname:</label>
+              <label>Last Name:</label>
               <input
                 type="text"
                 name="lastname"
@@ -163,8 +163,8 @@
                 type="tel"
                 name="phone"
                 placeholder="+383 000-000-000"
-                pattern="[+0-9]{1,15}"
-                maxlength="15"
+                pattern="[+0-9]{1,9}"
+                maxlength="9"
                 required
               />
               <label>Preferred Time to Contact:</label>
@@ -186,7 +186,7 @@
               <input
                 type="text"
                 name="room_number"
-                placeholder="231"
+                placeholder="0-300"
                 maxlength="3"
                 minlength="1"
               />

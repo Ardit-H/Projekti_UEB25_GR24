@@ -32,20 +32,24 @@
 
       public function print() {
          echo "<h2>Request Received:</h2>";
-         echo "Name: {$this->name}<br>";
-         echo "Lastname: {$this->lastname}<br>";
-         echo "Email: {$this->email}<br>";
-         echo "Phone: {$this->phone}<br>";
-         echo "Type: {$this->requestType}<br>";
+         echo "<h3>Name: {$this->name}</h3><br>";
+         echo "<h3>Last Name: {$this->lastname}</h3><br>";
+         echo "<h3>Email: {$this->email}</h3><br>";
+         echo "<h3>Phone: {$this->phone}</h3><br>";
+         echo "<h3>Type: {$this->requestType}</h3><br>";
 
-      echo "<h4>Details:</h4>";
+      echo "<h3>Details:</h3>";
+         echo "<pre class='details'>";
+
          foreach ($this->details as $key => $value) {
             echo ucfirst(str_replace('_', ' ', $key)) . ": " . $value . "<br>";
          }
+         echo "</pre>";
+        
       }
 
       public function __destruct() {
-      echo "<h2>The request has been sent!<h2>";
+      echo "<h2>The request has been sent!</h2>";
       }
       
          
