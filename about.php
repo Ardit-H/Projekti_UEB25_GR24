@@ -50,6 +50,82 @@
         extraordinary and timeless escape for generations to come.</p>
 </div>
 
+<?php
+$visitorComments = [
+    "Elira" => ["comment" => "Absolutely loved the peaceful atmosphere!", "date" => "2024-06-15"],
+    "Blerim" => ["comment" => "The staff was incredibly welcoming.", "date" => "2023-12-01"],
+    "Ardita" => ["comment" => "Amazing views and great food!", "date" => "2024-02-20"],
+    "Gent"   => ["comment" => "A perfect place to disconnect from everything.", "date" => "2023-11-05"]
+];
+
+if (isset($_GET['commentsort'])) {
+    $sortOption = $_GET['commentsort'];
+
+    switch ($sortOption) {
+        case 'name_asc':
+            ksort($visitorComments);
+            break;
+        case 'name_desc':
+            krsort($visitorComments); 
+            break;
+        case 'date_asc':
+          
+            $dates = [];
+            foreach ($visitorComments as $name => $data) {
+                $dates[$name] = $data['date'];
+            }
+            asort($dates);
+            $sorted = [];
+            foreach ($dates as $name => $d) {
+                $sorted[$name] = $visitorComments[$name];
+            }
+            $visitorComments = $sorted;
+            break;
+        case 'date_desc':
+            $dates = [];
+            foreach ($visitorComments as $name => $data) {
+                $dates[$name] = $data['date'];
+            }
+            arsort($dates);
+            $sorted = [];
+            foreach ($dates as $name => $d) {
+                $sorted[$name] = $visitorComments[$name];
+            }
+            $visitorComments = $sorted;
+            break;
+    }
+}
+?>
+
+<div style="background-color:rgb(255, 255, 255);border-radius: 10px;color:black;padding:20px ;margin-bottom:80px ;margin-left: 20px; margin-right: 20px;">
+    <h2 style="color:#ffde65;">Visitor Comments</h2>
+    <form method="GET" style="margin-bottom: 15px;">
+        <label>Sort by:</label>
+        <select name="commentsort" onchange="this.form.submit()">
+            <option value="">Choose</option>
+            <option value="name_asc" <?= (isset($_GET['commentsort']) && $_GET['commentsort'] == 'name_asc') ? 'selected' : '' ?>>Name A-Z</option>
+            <option value="name_desc" <?= (isset($_GET['commentsort']) && $_GET['commentsort'] == 'name_desc') ? 'selected' : '' ?>>Name Z-A</option>
+            <option value="date_asc" <?= (isset($_GET['commentsort']) && $_GET['commentsort'] == 'date_asc') ? 'selected' : '' ?>>Oldest First</option>
+            <option value="date_desc" <?= (isset($_GET['commentsort']) && $_GET['commentsort'] == 'date_desc') ? 'selected' : '' ?>>Newest First</option>
+        </select>
+    </form>
+
+    <?php foreach ($visitorComments as $name => $data): ?>
+        <div style="background-color: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
+            <strong><?= htmlspecialchars($name) ?></strong>
+            <span style="float: right; color: gray; font-size: 0.9em;"><?= date("F j, Y", strtotime($data['date'])) ?></span>
+            <p style="margin-top: 5px;"><?= htmlspecialchars($data['comment']) ?></p>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<?php 
+  include("footer.php");
+  ?>
+</body>
+</html>
+
+
 <?php 
   include("footer.php");
   ?>
