@@ -6,6 +6,22 @@
   <link rel="stylesheet" href="css/headerstyles.css">
   <link rel="stylesheet" href="css/footerstyles.css">
 
+  <style>
+    .photo{
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Makes it responsive */
+      gap: 30px;
+      margin: 50px 0;
+    }
+
+    .photo img{
+      width: 100%;  /* Makes each image take up the full width of its container */
+      height: 250px; /* Fixed height, you can adjust this value */
+      object-fit: cover;  /* Ensures the image fills the container without distortion */
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow around images */
+    }
+    </style>
 </head>
 <body>
 <?php 
@@ -23,8 +39,17 @@
       Each dish is crafted with passion to satisfy every palate – from the most traditional to the most adventurous. Our welcoming and modern atmosphere is perfect for a dinner with friends, a family lunch, or a special night out. 
 </p>
     </main>
-      
-  
+    <div style="color: #f5c518;justify-content: center; text-align: center;"><h1> Our Meals</h1></div>
+
+    <div class="photo" style="margin-bottom: 100px; ">
+      <img src="foto/Restaurant1.jpg" alt="Restaurant">
+      <img src="foto/Restaurant2.jpg" alt="Restaurant">
+      <img src="foto/Restaurant3.jpg" alt="Restaurant">
+      <img src="foto/Restaurant4.jpg" alt="Restaurant">
+      <img src="foto/Restaurant5.jpg" alt="Restaurant">
+      <img src="foto/Restaurant6.jpg" alt="Restaurant">
+      <img src="foto/Restaurant7.jpg" alt="Restaurant">
+      <img src="foto/Restaurant8.jpg" alt="Restaurant">
 
 
       <?php 
