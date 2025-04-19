@@ -21,6 +21,7 @@
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow around images */
     }
+    
     </style>
 </head>
 <body>
@@ -50,7 +51,7 @@
       <img src="foto/Restaurant6.jpg" alt="Restaurant">
       <img src="foto/Restaurant7.jpg" alt="Restaurant">
       <img src="foto/Restaurant8.jpg" alt="Restaurant">
-
+  </div>
 
       <?php 
   include("footer.php");
