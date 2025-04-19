@@ -42,7 +42,10 @@ $this->description();
 echo "</div>";
 //right
 echo "<div style='flex: 1; text-align: right;'>";
+echo "<div style='display: flex; justify-content: flex-end; align-items: center;height:30px; gap:7px'>";
+echo "<p class='heart'>&#10084;</p>";
 echo "<p class='rating' >Rating: " . $this->rating . "★</p>";
+echo "</div>";
 echo "<h3 class='price'>Price: " . CURRENCY . number_format($this->price, 2) . " per night</h3>";
 echo "<a href=\"book.php?room=$this->name \"><button class='book-now-button' style='background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;'>". strtoupper("Book Now") ."</button></a>";
 echo "</div>";
@@ -234,7 +237,7 @@ if (isset($_GET['filter'])) {
       padding: 0 20px;
     }
     .rating{
-      margin-bottom: 5px;
+      margin-bottom: 15px;
       color: #000000;
     }
     .price{
@@ -294,7 +297,23 @@ if (isset($_GET['filter'])) {
             from { transform: scale(0.8); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
+        .heart {
+    font-size: 24px;
+    cursor: pointer;
+    color: #ccc;
+    transition: transform 0.3s ease, color 0.3s ease;
+    float: right;
+    user-select: none;
+}
 
+.heart:hover {
+    transform: scale(1.2);
+    color: #999;
+}
+
+.heart.liked {
+    color: red;
+}
     </style>
 </head>
 <body>
@@ -409,6 +428,7 @@ if (isset($_GET['filter'])) {
       <h3 style="color: #000000;">Price: $1250 per night</h3>
     </div>
   </div> -->
+  <audio id="likeAudio" src="Like-audio.mp3.mp3" preload="auto"></audio>
   <?php 
   include("footer.php");
   ?>
@@ -422,8 +442,6 @@ if (isset($_GET['filter'])) {
                 <img src="${this.src}" class="modal-img" />
             `;
             document.body.appendChild(modal);
-
-            // Mbyll kur klikon jashtë imazhit
             modal.addEventListener('click', function (e) {
                 if (e.target === modal || e.target.classList.contains('close-btn')) {
                     modal.remove();
@@ -432,5 +450,18 @@ if (isset($_GET['filter'])) {
         });
     });
     </script>
+    <script>
+document.querySelectorAll('.heart').forEach(heart => {
+    heart.addEventListener('click', function () {
+        if (!this.classList.contains('liked')) {
+            this.classList.add('liked');
+            var audio = document.getElementById('likeAudio');
+            audio.play();
+        } else {
+            this.classList.remove('liked');
+        }
+    });
+});
+</script>
 </body>
 </html>
