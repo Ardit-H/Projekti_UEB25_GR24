@@ -119,6 +119,7 @@ if (isset($_GET['commentsort'])) {
     <?php endforeach; ?>
 </div>
 
+
 <?php 
   include("footer.php");
   ?>
