@@ -62,6 +62,44 @@
     <img src="foto/Aman_Amanpuri_Dining_7_0.webp" alt="Amanpuri Resort 4">
   </div>
 
+  <?php
+    $GLOBALS['ambientet'] = array(
+      "Infinity Pool",
+      "Beach Lounge",
+      "Sunset Bar",
+      "Ocean Pavilion",
+      "Spa & Wellness Center"
+    );
+
+    function renditRritje() {
+      global $ambientet; 
+      sort($ambientet); 
+      echo "<div style='text-align:center; margin-bottom: 30px;'>";
+      echo "<h3 style='color:#f5c518;'>Environments:</h3>";
+      echo "<ul style='list-style:none; padding:0; color:white;'>";
+      foreach ($ambientet as $a) {
+        echo "<li>$a</li>";
+      }
+      echo "</ul></div>";
+    }
+
+    function renditZbritje() {
+      global $ambientet; 
+      rsort($ambientet); 
+      echo "<div style='text-align:center;'>";
+      echo "<h3 style='color:#f5c518;'>Environments:</h3>";
+      echo "<ul style='list-style:none; padding:0; color:white;'>";
+      foreach ($ambientet as $a) {
+        echo "<li>$a</li>";
+      }
+      echo "</ul></div>";
+    }
+
+    
+    renditRritje();
+    // renditZbritje();
+  ?>
+
   
   <?php 
   include("footer.php");
