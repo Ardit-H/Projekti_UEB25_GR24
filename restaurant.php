@@ -166,6 +166,8 @@
     $time = $_POST['time'];
     $people = $_POST['people'];
 
+  
+
     if(!preg_match("/^[a-zA-Z\s]+$/", $name)){
       echo "<p style='color:red; text-align:center;'>❌ Name is not valid. Use letters only.</p> ";
     } else if(!preg_match("/^[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}$/", $email)){
@@ -179,9 +181,22 @@
     } else {
       echo "<p style='color:green; text-align:center;'>✅ Reservation received for <strong>$people person(s) </strong> on <strong>$date</strong> at <strong>$time</strong>!<br>
       We'll contact you soon. </p>";
+      echo "<script>
+      localStorage.setItem('reservationSuccess', 'true');
+    </script>";
     }
   }
   ?>
+  <!-- JavaScript për kontrollimin dhe shfaqjen e mesazhit vetëm një herë -->
+<script>
+  // Kontrollo nëse mesazhi është ruajtur në localStorage dhe shfaq mesazhin vetëm një herë
+  window.onload = function() {
+    if (localStorage.getItem('reservationSuccess') === 'true') {
+      // Shfaq mesazhin dhe fshihet nga localStorage
+      localStorage.removeItem('reservationSuccess');
+    }
+  };
+</script>
       <?php 
   include("footer.php");
   ?>
