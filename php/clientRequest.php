@@ -1,11 +1,11 @@
 <?php
    class ClientRequest{
-      protected $name;
-      protected $lastname;
-      protected $email;
-      protected $phone;
-      protected $requestType;
-      protected $details = [];
+      private $name;
+      private $lastname;
+      private $email;
+      private $phone;
+      private $requestType;
+      private $details = [];
 
       public function __construct($name, $lastname, $email, $phone, $requestedType, $details){
          $this->name = $name;
@@ -19,16 +19,13 @@
       }
         
       public function getName() {
-      return $this->name;
+      return  "<h2>" . $this->name . "</h2>";
       }
 
       public function getRequestType() {
-      return $this->requestType;
+      return  "<p>".$this->requestType . "</p>";
       }
 
-      public function getDetails() {
-      return $this->details;
-      }
 
       public function print() {
          echo "<h2>Request Received:</h2>";
