@@ -18,8 +18,6 @@
       </div>  </main>
       
   
-
-
 <div style="background-color:rgb(255, 255, 255);border-radius: 10px;color:black;padding:20px ;margin-bottom:80px;margin-left: 20px; margin-right: 20px;">
     <h2>Location</h2>
     <p> Amanpuri Hotel is located in the idyllic and picturesque region of <span style="background-color: #ffde65; padding: 0 5px;border-radius:20px;">Phuket, Thailand</span>, a world-renowned tropical paradise known 
@@ -57,6 +55,19 @@ $visitorComments = [
     "Ardita" => ["comment" => "Amazing views and great food!", "date" => "2024-02-20"],
     "Gent"   => ["comment" => "A perfect place to disconnect from everything.", "date" => "2023-11-05"]
 ];
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['visitor_name']) && !empty($_POST['visitor_comment'])) {
+    $newName = htmlspecialchars(trim($_POST['visitor_name']));
+    $newComment = htmlspecialchars(trim($_POST['visitor_comment']));
+    $today = date("Y-m-d");
+
+  
+    $visitorComments = array_merge(
+        [$newName => ["comment" => $newComment, "date" => $today]],
+        $visitorComments
+    );
+}
+
 
 if (isset($_GET['commentsort'])) {
     $sortOption = $_GET['commentsort'];
@@ -99,6 +110,8 @@ if (isset($_GET['commentsort'])) {
 
 <div style="background-color:rgb(255, 255, 255);border-radius: 10px;color:black;padding:20px ;margin-bottom:80px ;margin-left: 20px; margin-right: 20px;">
     <h2 style="color:#ffde65;">Visitor Comments</h2>
+
+    
     <form method="GET" style="margin-bottom: 15px;">
         <label>Sort by:</label>
         <select name="commentsort" onchange="this.form.submit()">
@@ -110,6 +123,16 @@ if (isset($_GET['commentsort'])) {
         </select>
     </form>
 
+    <h3 style="margin-top: 30px;">Leave a Comment</h3>
+    <form method="POST" style="margin-bottom: 30px;">
+        <input type="text" name="visitor_name" placeholder="Your name" required 
+            style="padding: 8px; width: 200px; border-radius: 5px; border: 1px solid #ccc; margin-bottom: 10px;"><br>
+        <textarea name="visitor_comment" placeholder="Your comment..." required 
+            style="padding: 10px; width: 300px; height: 80px; border-radius: 5px; border: 1px solid #ccc;"></textarea><br>
+        <button type="submit" style="padding: 10px 20px; background-color: #ffde65; border: none; border-radius: 5px; margin-top: 10px;">Post Comment</button>
+    </form>
+
+    
     <?php foreach ($visitorComments as $name => $data): ?>
         <div style="background-color: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
             <strong><?= htmlspecialchars($name) ?></strong>
@@ -119,16 +142,8 @@ if (isset($_GET['commentsort'])) {
     <?php endforeach; ?>
 </div>
 
+    
 
-<?php 
-  include("footer.php");
-  ?>
-</body>
-</html>
-
-
-<?php 
-  include("footer.php");
-  ?>
+<?php include("footer.php"); ?>
 </body>
 </html>
