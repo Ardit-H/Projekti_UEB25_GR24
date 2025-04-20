@@ -15,6 +15,13 @@ class Room{
     public function getRating() {
       return $this->rating;
   }
+  public function setRating($rating) {
+    if (is_numeric($rating) && $rating >= 0 && $rating <= 5) {
+        $this->rating = $rating;
+    } else {
+        throw new Exception("Rating duhet të jetë një numër midis 0 dhe 5.");
+    }
+}
   protected function extraDetails() {
     echo "<p class='room-detail'>" . "📶 Wifi"."</p>";
 }
@@ -168,6 +175,7 @@ $rooms = [
   new PrivateVillas("Private Villas", 900, ["villat1.jpg", "villat2.jpg", "villat3.jpg", "villat4.jpg"],5),
   new WellnessSuite("Wellness Suite", 1250, ["wellnesssuite1.jpg", "wellnesssuite2.jpg", "wellnesssuite3.jpg", "wellnesssuite4.jpg"],4),
 ];
+$rooms[0]->setRating(3.5);
 usort($rooms, function($a, $b) {
   return $a->price - $b->price;
 });
