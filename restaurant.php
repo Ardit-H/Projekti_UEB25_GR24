@@ -20,7 +20,7 @@
       object-fit: cover;  /* Ensures the image fills the container without distortion */
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow around images */
-    }
+    } 
     
     </style>
 </head>
