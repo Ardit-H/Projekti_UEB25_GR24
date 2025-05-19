@@ -1,23 +1,45 @@
 <?php
 session_start();
-// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-//     // Ketu vendosni kontrollin e vertete nga database
-//     $email = $_POST['email'];
-//     $password = $_POST['password'];
+require_once("database.php");
+$error="";
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+  $username=$_POST['username'];
+  $password=$_POST['password'];
+  
+   $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-//     // Shembull i thjeshte statik (ndrysho me kontroll nga database)
-//     if ($email == 'admin@amanpuri.com' && $password == 'admin123') {
-//         $_SESSION['role'] = 'admin';
-//         header('Location: dashboard_admin.php');
-//         exit;
-//     } elseif ($email == 'user@amanpuri.com' && $password == 'user123') {
-//         $_SESSION['role'] = 'user';
-//         header('Location: dashboard_user.php');
-//         exit;
-//     } else {
-//         $error = "Invalid credentials!";
-//     }
-// }
+    if ($result->num_rows === 1){
+        $user = $result->fetch_assoc();
+
+        $hashed_input_password = hash('sha256', $user['salt'] . $password);
+
+        if ($hashed_input_password === $user['hashed_password']) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['roli'] = $user['roli'];
+
+            if ($user['roli'] === 'admin') {
+                // header('Location: admin_dashboard.php');
+            } else {
+                // header('Location: user_dashboard.php');
+            }
+             header('Location: index.php');
+            exit;
+        } else {
+            $error = "Password is incorrect.";
+        }
+    } else {
+        $error = "User not found.";
+    }
+
+    $stmt->close();
+    $conn->close();
+
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +67,7 @@ session_start();
       text-align: center;
     }
 
-    input[type="email"], input[type="password"] {
+    input[type="text"], input[type="password"] {
       width: 100%;
       padding: 10px;
       margin: 10px 0;
@@ -75,9 +97,9 @@ session_start();
 <body>
   <div class="login-box">
     <h2>Login to Amanpuri</h2>
-    <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
+      <?php if (!empty($error)) echo "<p style='color:red;'>$error</p>"; ?>
     <form method="POST">
-      <input type="email" name="email" placeholder="Email" required><br>
+      <input type="text" name="username" placeholder="Username" required><br>
       <input type="password" name="password" placeholder="Password" required><br>
       <button type="submit">Login</button>
       <a href="signup.php">Don't have an account? Sign Up</a>

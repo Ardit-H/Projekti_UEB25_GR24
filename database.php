@@ -11,6 +11,6 @@
     echo "Error";
  }
  else{
-    echo "connected with db server";
+   //  echo "connected with db server";
  }
 ?>

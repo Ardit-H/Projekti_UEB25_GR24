@@ -7,7 +7,7 @@ CREATE TABLE users (
     phone VARCHAR(15),
     card_number VARCHAR(16),
     salt VARCHAR(50),
-    hashed_password VARCHAR(40),
+    hashed_password VARCHAR(64),
     roli VARCHAR(20) DEFAULT 'user',
     created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
