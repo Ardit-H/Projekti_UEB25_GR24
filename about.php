@@ -19,7 +19,8 @@
       
   
 <div style="background-color:rgb(255, 255, 255);border-radius: 10px;color:black;padding:20px ;margin-bottom:80px;margin-left: 20px; margin-right: 20px;">
-    <h2 style="font-size: 2rem; color: #ffde65;"otel is located in the idyllic and picturesque region of <span style="background-color: #ffde65; padding: 0 5px;border-radius:20px;">Phuket, Thailand</span>, a world-renowned tropical paradise known 
+    <h2 style="font-size: 2rem; color: #ffde65;">Location</h2>
+    <p>Hotel is located in the idyllic and picturesque region of <span style="background-color: #ffde65; padding: 0 5px;border-radius:20px;">Phuket, Thailand</span>, a world-renowned tropical paradise known 
         for its crystal-clear waters, lush landscapes, and serene atmosphere. The resort is nestled along the tranquil shores of the Andaman Sea, 
         offering guests sweeping views of white sandy beaches and the surrounding island vistas. Its prime location allows visitors to enjoy both 
         privacy and access to the vibrant culture and activities that Phuket has to offer. From exploring hidden coves and snorkeling in pristine waters 
