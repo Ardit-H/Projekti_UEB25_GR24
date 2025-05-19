@@ -42,35 +42,6 @@ $errors = [];
             $errors[] = "Invalid flight number. It should contain only digits and be up to 4 numbers long (e.g. 1234).";
         if ($arrivalDate < $today) 
             $errors[] = "Invalid arrival date. The date cannot be in the past.";
-
-    } elseif ($requestType === 'car') {
-        $pickupTime = $_POST['pickup_time'];
-        $pickupLocation = $_POST['pickup_location'];
-        $destination = $_POST['destination'];
-
-        if (empty($pickupTime)) {
-        $errors[] = "Pickup time is required.";
-    } else if ($pickupTime < $time) {
-        $errors[] = "Pickup time cannot be in the past.";
-    }
-        if (!validateText($pickupLocation))
-            $errors[] = "Invalid pickup location. Only letters and spaces are allowed (e.g. Main Street).";
-        if (!validateText($destination))
-            $errors[] = "Invalid destination. Only letters and spaces are allowed (e.g. Central Station).";
-
-    } elseif ($requestType === 'lost') {
-        $preferredTime = $_POST['preferred_time'];
-        $reason = $_POST['reason'];
-        $stayDate = $_POST['stay_date'];
-        $roomNumber = $_POST['room_number'];
-        $itemDescription = $_POST['item_description'];
-
-        if ($stayDate > $today) 
-            $errors[] = "Invalid stay date. The stay date cannot be in the future.";
-        if (!preg_match("/^([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-9]{2}|300)$/", $roomNumber)) 
-            $errors[] = "Invalid room number. It must be a number between 0 and 300.";
-        if (strlen($itemDescription) < 5) 
-            $errors[] = "Item description is too short. Please enter at least 5 characters.";
     }
 
     if (!empty($errors)) {
@@ -82,45 +53,19 @@ $errors = [];
 
     $details = [];
 
-    switch($requestType){
-       case 'flight' :
+    if($requestType === "flight"){
         $details = [
-          'flight_number' => $_POST['flight_number'],
-          'arrival_date' => $_POST['arrival_date'],
-          'aditional_notes' => $_POST['notes']
-        ]; 
-        break;
-      
-      case 'car':
-        $details = [
-          'pickup_location' => $_POST['pickup_location'],
-          'pickup_time' => $_POST['pickup_time'],
-          'destination' => $_POST['destination'],
-          'vehicle' => $_POST['vehicle'],
-          'notes' => $_POST['notes']
-        ];
-        break;
-      
-      case 'lost':
-        $details = [
-          'preferred_time' => $_POST['preferred_time'],
-          'reason' => $_POST['reason'],
-          'stay_date' => $_POST['stay_date'],
-          'room_number' => $_POST['room_number'],
-          'item_description' => $_POST['item_description'],
-          'additional_info' => $_POST['additional_info']
-        ];
-        break;
-
-        default :
+            'flight_number' => $_POST['flight_number'],
+            'arrival_date' => $_POST['arrival_date'],
+            'aditional_notes' => $_POST['notes']
+            ];
+    } else{
         echo "Invalid request type.";
-        exit;
+        }
     }
     $client = new ClientRequest($name, $lastname, $email, $phone, $requestType, $details);
     $client->print();
-
-
-  }
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
