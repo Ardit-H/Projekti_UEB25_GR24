@@ -1,10 +1,10 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50),
-name VARCHAR(50),
-lastname VARCHAR(50),
+    name VARCHAR(50),
+    lastname VARCAHR(50),
     email VARCHAR(80),
-salt VARCHAR(50),
+    salt VARCHAR(50),
     hashed_password VARCHAR(40),
     phone VARCHAR(15),
     card_number VARCHAR(16)
@@ -26,7 +26,7 @@ CREATE TABLE book_table(
 CREATE TABLE flight_assistance (
     id SERIAL PRIMARY KEY,
     flight_number VARCHAR(4),
-created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     arrival_time TIMESTAMP,
     additional_route VARCHAR(400)
 );
