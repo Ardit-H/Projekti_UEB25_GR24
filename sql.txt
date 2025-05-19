@@ -1,13 +1,13 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
+    firstname VARCHAR(50),
+    lastname VARCHAR(50),
     username VARCHAR(50),
-    name VARCHAR(50),
-    lastname VARCAHR(50),
     email VARCHAR(80),
-    salt VARCHAR(50),
-    hashed_password VARCHAR(40),
     phone VARCHAR(15),
     card_number VARCHAR(16),
+    salt VARCHAR(50),
+    hashed_password VARCHAR(40),
     roli VARCHAR(20) DEFAULT 'user',
     created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

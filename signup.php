@@ -1,16 +1,39 @@
-<!-- <?php
+ <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Ruajtje e të dhënave në database (jo e përfshirë këtu)
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $role = 'user'; // default
+    require_once("database.php");
 
-    // Nje redirect i thjeshte
-    header('Location: login.php');
-    exit;
+    $username = $_POST['username'];
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $card_number = $_POST['card_number'];
+    $password = $_POST['password'];
+    $role = 'user';
+
+    $salt = bin2hex(random_bytes(16));
+    $hashed_password = hash('sha256', $salt . $password);
+
+   $stmt = $conn->prepare("INSERT INTO users (firstname, lastname,username, email, phone, card_number, salt, hashed_password,roli)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+    if ($stmt){
+        $stmt->bind_param("sssssssss",$firstname, $lastname,$username, $email, $phone, $card_number, $salt, $hashed_password, $role);
+        if ($stmt->execute()) {
+            header('Location: login.php');
+            exit;
+        } else {
+            echo "Error executing query: " . $stmt->error;
+        }
+        $stmt->close();
+    } else {
+        echo "Error preparing statement: " . $conn->error;
+    }
+
+    $conn->close();
+
 }
-?> -->
+?> 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -68,8 +91,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <div class="signup-box">
     <h2>Sign Up</h2>
     <form method="POST">
-      <input type="text" name="name" placeholder="Full Name" required><br>
+      <input type="text" name="firstname" placeholder="First Name" required><br>
+      <input type="text" name="lastname" placeholder="Last Name" required><br>
+      <input type="text" name="username" placeholder="Username" required><br>
       <input type="email" name="email" placeholder="Email" required><br>
+      <input type="text" name="phone" placeholder="Phone number" required><br>
+      <input type="text" name="card_number" placeholder="Card Number" required><br>
       <input type="password" name="password" placeholder="Password" required><br>
       <button type="submit">Sign Up</button>
       <a href="login.php">Already have an account? Login</a>
