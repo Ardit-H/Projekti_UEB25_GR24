@@ -24,7 +24,7 @@ include("sidebar.php");
             include("pages/comments.php");
             break;
         case 'users':
-            include("pages/users.php");
+            include("pages/manage_users.php");
             break;
         default:
             echo "<p>Page not found.</p>";
