@@ -2,11 +2,7 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50),
     name VARCHAR(50),
-<<<<<<< HEAD
-    lastname VARCAHR(50),
-=======
     lastname VARCHAR(50),
->>>>>>> e9bd929be984e9d2a0b005b4a929bd4e962ac73c
     email VARCHAR(80),
     salt VARCHAR(50),
     hashed_password VARCHAR(40),
@@ -25,7 +21,7 @@ CREATE TABLE book_table(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
     created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    reservation_moment TIMESTAMP DEFAULT NULL,
+    reservation_moment TIMESTAMP NULL,
     number_of_people NUMERIC(2)
 );
 
@@ -34,18 +30,14 @@ CREATE TABLE flight_assistance (
     user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
     flight_number VARCHAR(4),
     created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-<<<<<<< HEAD
-    arrival_time TIMESTAMP,
-=======
-    arrival_time TIMESTAMP DEFAULT NULL,
->>>>>>> e9bd929be984e9d2a0b005b4a929bd4e962ac73c
+    arrival_time TIMESTAMP NULL,
     additional_route VARCHAR(400)
 );
 
 CREATE TABLE book_room (
     id SERIAL PRIMARY KEY,
-    check_in_time TIMESTAMP DEFAULT NULL,
-    check_out_time TIMESTAMP DEFAULT NULL,
+    check_in_time TIMESTAMP NULL,
+    check_out_time TIMESTAMP NULL,
     room_type INTEGER REFERENCES users(id) ON DELETE SET NULL
 );
 
