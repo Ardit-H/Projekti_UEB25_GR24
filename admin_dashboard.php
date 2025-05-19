@@ -15,13 +15,13 @@ include("sidebar.php");
             include("pages/home.php");
             break;
         case 'rooms':
-            include("pages/rooms.php");
+            include("pages/manage_rooms.php");
             break;
         case 'restaurant':
             include("pages/restaurant.php");
             break;
         case 'comments':
-            include("pages/comments.php");
+            include("pages/manage_comments.php");
             break;
         case 'users':
             include("pages/manage_users.php");

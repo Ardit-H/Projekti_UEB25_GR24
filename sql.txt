@@ -36,10 +36,12 @@ CREATE TABLE flight_assistance (
 
 CREATE TABLE book_room (
     id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+    room_id  INTEGER REFERENCES rooms(id) ON DELETE SET NULL,
     check_in_time TIMESTAMP  NULL,
-    check_out_time TIMESTAMP  NULL,
-    room_type INTEGER REFERENCES users(id) ON DELETE SET NULL
+    check_out_time TIMESTAMP  NULL
 );
+
 
 CREATE TABLE rooms (
     id SERIAL PRIMARY KEY,
