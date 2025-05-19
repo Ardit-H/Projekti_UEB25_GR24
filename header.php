@@ -58,6 +58,9 @@
       <?php if (isset($_SESSION['username'])): ?>
         <span class="user-icon">🔓</span>
         <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+         <?php if (isset($_SESSION['roli']) && $_SESSION['roli'] === 'admin'): ?>
+            <a href="admin_dashboard.php">Admin Panel</a>
+         <?php endif; ?>
         <a href="logout.php">Logout</a>
       <?php else: ?>
         <a href="login.php">Login</a>
