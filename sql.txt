@@ -1,13 +1,15 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50),
-name VARCHAR(50),
-lastname VARCHAR(50),
+    name VARCHAR(50),
+    lastname VARCHAR(50),
     email VARCHAR(80),
-salt VARCHAR(50),
+    salt VARCHAR(50),
     hashed_password VARCHAR(40),
     phone VARCHAR(15),
-    card_number VARCHAR(16)
+    card_number VARCHAR(16),
+    created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
 );
 CREATE TABLE comments (
     id SERIAL PRIMARY KEY,
@@ -18,23 +20,24 @@ CREATE TABLE comments (
 CREATE TABLE book_table(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
-    reservation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    reservation_moment TIMESTAMP,
+    created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    reservation_moment TIMESTAMP DEFAULT NULL,
     number_of_people NUMERIC(2)
 );
 
 CREATE TABLE flight_assistance (
     id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
     flight_number VARCHAR(4),
-created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    arrival_time TIMESTAMP,
+    created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    arrival_time TIMESTAMP DEFAULT NULL,
     additional_route VARCHAR(400)
 );
 
 CREATE TABLE book_room (
     id SERIAL PRIMARY KEY,
-    check_in_time TIMESTAMP,
-    check_out_time TIMESTAMP,
+    check_in_time TIMESTAMP DEFAULT NULL,
+    check_out_time TIMESTAMP DEFAULT NULL,
     room_type INTEGER REFERENCES users(id) ON DELETE SET NULL
 );
 
