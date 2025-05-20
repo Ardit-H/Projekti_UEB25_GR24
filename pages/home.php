@@ -74,7 +74,7 @@ $reservations = $conn->query("
         }
         thead {
             background-color: #f5c518;
-            color: white;
+            color: black;
         }
         tr:nth-child(even) {
             background-color: #fafafa;

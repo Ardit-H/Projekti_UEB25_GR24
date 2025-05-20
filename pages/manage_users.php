@@ -48,25 +48,132 @@ if (!$result) {
     exit;
 }
 ?>
+<style>
+
+    .dashboard-section h2, .dashboard-section h3 {
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    form.user-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px 30px;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .user-form label {
+        display: flex;
+        flex-direction: column;
+        font-weight: 500;
+        color: #444;
+    }
+
+    .user-form input,
+    .user-form select {
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+ .user-form button {
+    grid-column: span 2;
+    width: 150px;
+    padding: 8px;
+    background-color: #f5c518;
+    border: none;
+    color: #000;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    justify-self: center;
+}
+
+    .user-form button:hover {
+        background-color: #e5b400;
+    }
+
+    table {
+        margin-top: 30px;
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    thead {
+        background-color: #f5c518;
+        color: #000;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    button.delete {
+        padding: 6px 10px;
+        background-color: crimson;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button.delete:hover {
+        background-color: darkred;
+    }
+
+</style>
 
 <div class="dashboard-section">
     <h2>User Management</h2>
-
     <h3>Add New User</h3>
-    <form method="post" action="">
-        <label>Firstname: <input type="text" name="firstname" required></label><br>
-        <label>Lastname: <input type="text" name="lastname" required></label><br>
-        <label>Username: <input type="text" name="username" required></label><br>
-        <label>Email: <input type="email" name="email" required></label><br>
-        <label>Phone: <input type="text" name="phone" required></label><br>
-        <label>Role: 
+
+    <form class="user-form" method="post" action="">
+        <label>Firstname
+            <input type="text" name="firstname" required>
+        </label>
+        <label>Lastname
+            <input type="text" name="lastname" required>
+        </label>
+        <label>Username
+            <input type="text" name="username" required>
+        </label>
+        <label>Email
+            <input type="email" name="email" required>
+        </label>
+        <label>Phone
+            <input type="text" name="phone" required>
+        </label>
+        <label>Card Number
+            <input type="text" name="card_number" required>
+        </label>
+        <label>Role
             <select name="roli" required>
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
             </select>
-        </label><br>
-        <label>Card Number: <input type="text" name="card_number" required></label><br>
-        <label>Password: <input type="password" name="password" required></label><br><br>
+        </label>
+        <label>Password
+            <input type="password" name="password" required>
+        </label>
         <button type="submit">Add User</button>
     </form>
 
