@@ -123,9 +123,6 @@ if (!$result) {
         background-color: #f9f9f9;
     }
 
-    tbody tr:hover {
-        background-color: #f1f1f1;
-    }
 
     button.delete {
         padding: 6px 10px;
