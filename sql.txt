@@ -48,3 +48,10 @@ CREATE TABLE rooms (
     name VARCHAR(50),
     price NUMERIC(6, 2)
 );
+//Numerimi i vizitave tek rooms.php
+CREATE TABLE user_visits (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    visit_count INTEGER DEFAULT 1,
+    last_visit TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
