@@ -5,7 +5,7 @@ include("sidebar.php");
 ?>
 
 <div class="main-content">
-    <h1>Welcome, Administrator</h1>
+    <h1>Welcome, <?= htmlspecialchars($_SESSION['firstname']) ?></h1>
 
     <?php
     $page = $_GET['page'] ?? 'home';
