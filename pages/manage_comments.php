@@ -27,7 +27,7 @@ $comments = mysqli_fetch_all($result, MYSQLI_ASSOC);
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Menaxhimi i Komenteve</title>
+    <title>Comments Management</title>
     <style>
         table {
             border-collapse: collapse;
@@ -37,10 +37,11 @@ $comments = mysqli_fetch_all($result, MYSQLI_ASSOC);
         th, td {
             padding: 12px;
             border: 1px solid #ccc;
-            text-align: left;
+
         }
         th {
-            background-color: #f2f2f2;
+            background-color: #f5c518; 
+            color: black;;
         }
         .delete-btn {
             color: red;
@@ -50,14 +51,14 @@ $comments = mysqli_fetch_all($result, MYSQLI_ASSOC);
 </head>
 <body>
 
-<h2 style="text-align: center;">Komentet e Përdoruesve</h2>
-
-<table>
+<div class="dashboard-section">
+    <h2>Comments Management</h2>
+<table border="1" cellpadding="10" cellspacing="0" style="width: 100%; text-align: center;">
     <tr>
         <th>ID</th>
-        <th>Përdoruesi</th>
-        <th>Komenti</th>
-        <th>Veprimi</th>
+        <th>User</th>
+        <th>Comment</th>
+        <th>Action</th>
     </tr>
     <?php foreach ($comments as $row): ?>
         <tr>
@@ -70,6 +71,7 @@ $comments = mysqli_fetch_all($result, MYSQLI_ASSOC);
         </tr>
     <?php endforeach; ?>
 </table>
+    </div>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".delete-btn").forEach(button => {

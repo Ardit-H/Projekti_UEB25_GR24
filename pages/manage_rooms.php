@@ -25,7 +25,7 @@ if (!$result) {
 <div class="dashboard-section">
     <h2>Room Reservations</h2>
     <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; text-align: center;">
-        <thead style="background-color: #4CAF50; color: white;">
+        <thead style="background-color: #f5c518;; color: black;">
             <tr>
                 <th>Reservation ID</th>
                 <th>Room Name</th>
