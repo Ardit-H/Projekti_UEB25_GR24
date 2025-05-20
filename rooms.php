@@ -1,5 +1,47 @@
 
 <?php
+//Numerimi i vizitave ne faqen rooms.php
+session_start();
+require_once("database.php");
+
+if (isset($_SESSION['user_id'])&& isset($_SESSION['roli']) && $_SESSION['roli'] === 'user') {
+    $userId = $_SESSION['user_id'];
+
+    // Kontrollo nëse ekziston një rekord për këtë user
+    $stmt = $conn->prepare("SELECT * FROM user_visits WHERE user_id = ?");
+    if ($stmt) {
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result && $result->num_rows > 0) {
+            // Update: rrit numrin e vizitave dhe përditëso kohën
+            $updateStmt = $conn->prepare("UPDATE user_visits SET visit_count = visit_count + 1, last_visit = NOW() WHERE user_id = ?");
+            if ($updateStmt) {
+                $updateStmt->bind_param("i", $userId);
+                $updateStmt->execute();
+                $updateStmt->close();
+            } else {
+                die("Gabim ne UPDATE prepare: " . $conn->error);
+            }
+        } else {
+            // Insert: regjistro vizitën e parë
+            $insertStmt = $conn->prepare("INSERT INTO user_visits (user_id, visit_count) VALUES (?, 1)");
+            if ($insertStmt) {
+                $insertStmt->bind_param("i", $userId);
+                $insertStmt->execute();
+                $insertStmt->close();
+            } else {
+                die("Gabim ne INSERT prepare: " . $conn->error);
+            }
+        }
+
+        $stmt->close();
+    } else {
+        die("Gabim ne SELECT prepare: " . $conn->error);
+    }
+}
+
 define("CURRENCY","$");
 class Room{
   protected $name;
@@ -31,12 +73,7 @@ protected function description(){
     public function displayRoom(){
      echo" <div class='room'>";
      echo "<h1 style='color: #f5c518; justify-content: center; text-align: center; padding: 20px;'>" . htmlspecialchars($this->name) . "</h1>";
-  //    echo "<div class='photo-gallery' style='margin-bottom: 10px;'>"; 
 
-  //    foreach ($this->images as $image) {
-  //     echo "<img src='foto/" . htmlspecialchars($image) . "' alt='" . htmlspecialchars($this->name) . "'>";
-  //    }
-  // echo "</div>";
       $this->displayPhotos();
   echo "<div class='room-details' style='display: flex; justify-content: space-between; align-items: center; padding: 0 20px;'>";
   //left
@@ -349,93 +386,6 @@ if (isset($_GET['filter'])) {
     $room->displayRoom();
   }
   ?>
-<!-- <div class="room">
-    <h1 style="color: #f5c518; justify-content: center; text-align: center; padding: 20px;"> Standard Room </h1>
-    <div class="photo-gallery" style="margin-bottom: 10px;"> 
-      <img src="foto/standard room1.jpg" alt="Amanpuri Resort 1">
-      <img src="foto/Aman_Amanpuri_Dining_2_0.webp" alt="Amanpuri Resort 2">
-      <img src="foto/standard room.jpg" alt="Amanpuri Resort 3">
-      <img src="foto/Aman_Amanpuri_Dining_7_0.webp" alt="Amanpuri Resort 4">
-    </div>
-    <div style="text-align: center;">
-      <a href="book.html">
-      <button class="book-now-button" style="background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;">
-        Book Now
-      </button>
-    </a>
-      <h3 style="color: #000000;">Price: $250 per night</h3>
-    </div>
-  </div>
-
-  <div class="room">
-    <h1 style="color: #f5c518; justify-content: center; text-align: center; padding: 20px;"> Luxory Room </h1>
-    <div class="photo-gallery" style="margin-bottom: 10px;"> 
-      <img src="foto/luxoryroom1.jpg" alt="Amanpuri Resort 1">
-      <img src="foto/luxoryroom2.jpg" alt="Amanpuri Resort 2">
-      <img src="foto/luxoryroom3.jpg" alt="Amanpuri Resort 3">
-      <img src="foto/luxoryroom4.jpg" alt="Amanpuri Resort 4">
-    </div>
-    <div style="text-align: center;">
-      <a href="book.html">
-      <button class="book-now-button" style="background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;">
-        Book Now
-      </button>
-    </a>
-      <h3 style="color: #000000;">Price: $1500 per night</h3>
-    </div>
-  </div>
-
-  <div class="room">
-    <h1 style="color: #f5c518; justify-content: center; text-align: center; padding: 20px;"> Private Villas </h1>
-    <div class="photo-gallery" style="margin-bottom: 10px; align-items: center;"> 
-      <img src="foto/villat1.jpg" alt="Amanpuri Resort 1">
-      <img src="foto/villat2.jpg" alt="Amanpuri Resort 2">
-      <img src="foto/villat3.jpg" alt="Amanpuri Resort 3">
-      <img src="foto/villat4.jpg" alt="Amanpuri Resort 4">
-    </div>
-    <div style="text-align: center;">
-      <a href="book.html">
-      <button class="book-now-button" style="background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;">
-        Book Now
-      </button>
-    </a>
-      <h3 style="color: #000000;">Price: $900 per night</h3>
-    </div>
-  </div>
-  <div class="room">
-    <h1 style="color: #f5c518; justify-content: center; text-align: center; padding: 20px;"> Family Room </h1>
-    <div class="photo-gallery" style="margin-bottom: 10px; align-items: center;"> 
-      <img src="foto/familyroom1.jpg" alt="Amanpuri Resort 1">
-      <img src="foto/familyroom2.jpg" alt="Amanpuri Resort 2">
-      <img src="foto/familyroom3.jpg" alt="Amanpuri Resort 3">
-      <img src="foto/familyroom4.jpg" alt="Amanpuri Resort 4">
-    </div>
-    <div style="text-align: center;">
-      <a href="book.html">
-      <button class="book-now-button" style="background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;">
-        Book Now
-      </button>
-    </a>
-      <h3 style="color: #000000;">Price: $750 per night</h3>
-    </div>
-  </div>
-  <div class="room">
-    <h1 style="color: #f5c518; justify-content: center; text-align: center; padding: 20px;"> Wellness Suite </h1>
-    <div class="photo-gallery" style="margin-bottom: 10px; align-items: center;"> 
-      <img src="foto/wellnesssuite1.jpg" alt="Amanpuri Resort 1">
-      <img src="foto/wellnesssuite2.jpg" alt="Amanpuri Resort 2">
-      <img src="foto/wellnesssuite3.jpg" alt="Amanpuri Resort 3">
-      <img src="foto/wellnesssuite4.jpg" alt="Amanpuri Resort 4">
-    </div>
-    <div style="text-align: center;">
-      <a href="book.html">
-      <button class="book-now-button" style="background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;">
-        Book Now
-      </button>
-    </a>
-      <h3 style="color: #000000;">Price: $1250 per night</h3>
-    </div>
-  </div> -->
   <audio id="likeAudio" src="Like-audio.mp3.mp3" preload="auto"></audio>
   <?php 
   include("footer.php");

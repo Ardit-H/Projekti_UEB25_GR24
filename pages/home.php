@@ -136,5 +136,41 @@ $reservations = $conn->query("
     </table>
 </div>
 
+<?php
+//Per me dal tabela e perdoruesve me numrin e vizitave
+$userVisits = $conn->query("
+    SELECT u.firstname, u.lastname, uv.visit_count, uv.last_visit
+    FROM user_visits uv
+    JOIN users u ON uv.user_id = u.id
+    ORDER BY uv.visit_count DESC
+")->fetch_all(MYSQLI_ASSOC);
+?>
+
+<div class="dashboard-section">
+    <h2>User Visits</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Emri</th>
+                <th>Numri i Vizitave</th>
+                <th>Vizita e Fundit</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (count($userVisits) > 0): ?>
+                <?php foreach ($userVisits as $user): ?>
+                    <tr style="text-align: center;">
+                        <td><?= htmlspecialchars($user['firstname'] . ' ' . $user['lastname']) ?></td>
+                        <td><?= $user['visit_count'] ?></td>
+                        <td><?= $user['last_visit'] ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="3" style="text-align: center;">Nuk ka vizita të regjistruara.</td></tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>
