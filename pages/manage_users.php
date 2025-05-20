@@ -73,33 +73,61 @@ if (!$result) {
     <hr>
 
     <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; text-align: center;">
-        <thead style="background-color: #4CAF50; color: white;">
-            <tr>
-                <th>ID</th>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Role</th>
-                <th>Card Number</th>
-                <th>Created</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php while ($user = mysqli_fetch_assoc($result)): ?>
-                <tr>
-                    <td><?= htmlspecialchars($user['id']) ?></td>
-                    <td><?= htmlspecialchars($user['firstname']) ?></td>
-                    <td><?= htmlspecialchars($user['lastname']) ?></td>
-                    <td><?= htmlspecialchars($user['username']) ?></td>
-                    <td><?= htmlspecialchars($user['email']) ?></td>
-                    <td><?= htmlspecialchars($user['phone']) ?></td>
-                    <td><?= htmlspecialchars($user['roli']) ?></td>
-                    <td><?= htmlspecialchars($user['card_number']) ?></td>
-                    <td><?= htmlspecialchars($user['created_time']) ?></td>
-                </tr>
-            <?php endwhile; ?>
-        </tbody>
+       <thead style="background-color: #4CAF50; color: white;">
+    <tr>
+        <th>ID</th>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Role</th>
+        <th>Card Number</th>
+        <th>Created</th>
+        <th>Veprimi</th>
+    </tr>
+</thead>
+<tbody>
+    <?php while ($user = mysqli_fetch_assoc($result)): ?>
+        <tr id="user-row-<?= $user['id'] ?>">
+            <td><?= htmlspecialchars($user['id']) ?></td>
+            <td><?= htmlspecialchars($user['firstname']) ?></td>
+            <td><?= htmlspecialchars($user['lastname']) ?></td>
+            <td><?= htmlspecialchars($user['username']) ?></td>
+            <td><?= htmlspecialchars($user['email']) ?></td>
+            <td><?= htmlspecialchars($user['phone']) ?></td>
+            <td><?= htmlspecialchars($user['roli']) ?></td>
+            <td><?= htmlspecialchars($user['card_number']) ?></td>
+            <td><?= htmlspecialchars($user['created_time']) ?></td>
+            <td>
+                <button onclick="deleteUser(<?= $user['id'] ?>)">Fshij</button>
+            </td>
+        </tr>
+    <?php endwhile; ?>
+</tbody>
     </table>
 </div>
+<script>
+function deleteUser(userId) {
+    if (!confirm("A jeni i sigurt që doni ta fshini këtë përdorues?")) return;
+    fetch("pages/delete_users.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "id=" + encodeURIComponent(userId)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById("user-row-" + userId).remove();
+        } else {
+            alert("Fshirja dështoi: " + (data.message || "Gabim i panjohur"));
+        }
+    })
+    .catch(error => {
+        console.error("Gabim gjatë AJAX:", error);
+        alert("Ndodhi një gabim gjatë fshirjes.");
+    });
+}
+</script>
