@@ -362,6 +362,36 @@ if (isset($_GET['filter'])) {
 .heart.liked {
     color: red;
 }
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.filter-container form {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Hapësirë mes elementëve të formës */
+}
+
+.clear-likes-btn {
+    background-color: #f5c518;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.clear-likes-btn:hover {
+    background-color: #e4b00f;
+    transform: scale(1.05);
+}
     </style>
 </head>
 <body>
@@ -374,15 +404,19 @@ if (isset($_GET['filter'])) {
     </div>
   </main>
   
-  <form method="GET" action="">
-    <label for="filter">Filter by:</label>
-    <select name="filter" id="filter">
-        <option value="price" <?php if (isset($_GET['filter']) && $_GET['filter'] == 'price') echo 'selected'; ?>>Price</option>
-        <option value="rating" <?php if (isset($_GET['filter']) && $_GET['filter'] == 'rating') echo 'selected'; ?>>Rating</option>
-    </select>
-    <input type="submit" value="Apply Filter">
-  </form>
-  
+<div class="filter-container">
+    <form method="GET" action="">
+        <label for="filter">Filter by:</label>
+        <select name="filter" id="filter">
+            <option value="price" <?php if (isset($_GET['filter']) && $_GET['filter'] == 'price') echo 'selected'; ?>>Price</option>
+            <option value="rating" <?php if (isset($_GET['filter']) && $_GET['filter'] == 'rating') echo 'selected'; ?>>Rating</option>
+        </select>
+        <input type="submit" value="Apply Filter">
+    </form>
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <button id="clearLikes" class="clear-likes-btn">Remove all likes</button>
+    <?php endif; ?>
+</div>
   
   <?php
   foreach ($rooms as $room) {
@@ -444,6 +478,33 @@ document.querySelectorAll('.heart').forEach(heart => {
             console.error('Request failed:', error);
         }
     });
+});
+document.getElementById('clearLikes').addEventListener('click', async function () {
+    if (!confirm('A jeni i sigurt që doni të fshini të gjitha pëlqimet?')) return;
+
+    try {
+        const response = await fetch('clear_likes.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            // Hiq klasën 'liked' nga të gjitha zemrat
+            document.querySelectorAll('.heart').forEach(heart => {
+                heart.classList.remove('liked');
+            });
+            alert('Të gjitha pëlqimet u fshinë me sukses!');
+        } else {
+            console.error('Error:', result.error);
+            alert('Dështoi fshirja e pëlqimeve: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Request failed:', error);
+        alert('Ndodhi një gabim gjatë fshirjes së pëlqimeve.');
+    }
 });
 </script>
 </body>
