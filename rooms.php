@@ -54,6 +54,9 @@ class Room{
       $this->images=$images;
       $this->rating = $rating;
     }
+    public function getName() {
+        return $this->name;
+    }
     public function getRating() {
       return $this->rating;
   }
@@ -232,6 +235,13 @@ if (isset($_GET['filter'])) {
       });
   }
 }
+
+//Dhomat e vizituara
+if (isset($_SESSION['user_id'])) {
+    if (!isset($_SESSION['viewed_rooms'])) {
+        $_SESSION['ទ_rooms'] = [];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -366,15 +376,21 @@ if (isset($_GET['filter'])) {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 20px;
+    margin: 20px auto;
     padding: 10px;
     border-radius: 15px;
+    max-width: 1000px;
 }
 
 .filter-container form {
     display: flex;
     align-items: center;
-    gap: 10px; /* Hapësirë mes elementëve të formës */
+    gap: 10px;
+}
+
+.filter-container .clear-likes-btn,
+.filter-container .clear-viewed-btn {
+    margin-left: 10px;
 }
 
 .clear-likes-btn {
@@ -389,6 +405,22 @@ if (isset($_GET['filter'])) {
 }
 
 .clear-likes-btn:hover {
+    background-color: #e4b00f;
+    transform: scale(1.05);
+}
+.clear-viewed-btn {
+    background-color: #f5c518;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-left: 10px; /* Hapësirë mes butonit të pëlqimeve dhe këtij butoni */
+}
+
+.clear-viewed-btn:hover {
     background-color: #e4b00f;
     transform: scale(1.05);
 }
@@ -415,6 +447,7 @@ if (isset($_GET['filter'])) {
     </form>
     <?php if (isset($_SESSION['user_id'])): ?>
         <button id="clearLikes" class="clear-likes-btn">Remove all likes</button>
+        <button id="clearViewedRooms" class="clear-viewed-btn">Clear Viewed Rooms</button>
     <?php endif; ?>
 </div>
   
@@ -422,90 +455,171 @@ if (isset($_GET['filter'])) {
   foreach ($rooms as $room) {
     $room->displayRoom();
   }
+  //Lista e dhomave te vizituara nga perdoruesi
   ?>
+  <?php if (isset($_SESSION['user_id']) && isset($_SESSION['viewed_rooms']) && !empty($_SESSION['viewed_rooms'])): ?>
+    <div class="viewed-rooms-container">
+      <span>Visited rooms: <?php echo htmlspecialchars(implode(', ', $_SESSION['viewed_rooms'])); ?></span>
+    </div>
+ 
+<?php endif; ?>
   <audio id="likeAudio" src="Like-audio.mp3.mp3" preload="auto"></audio>
   <?php 
   include("footer.php");
   ?>
  <script>
     document.querySelectorAll('.photo-gallery img').forEach(img => {
-        img.addEventListener('click', function () {
-            const modal = document.createElement("div");
-            modal.className = "modal-backdrop";
-            modal.innerHTML = `
-                <span class="close-btn">&times;</span>
-                <img src="${this.src}" class="modal-img" />
-            `;
-            document.body.appendChild(modal);
-            modal.addEventListener('click', function (e) {
-                if (e.target === modal || e.target.classList.contains('close-btn')) {
-                    modal.remove();
-                }
-            });
+      img.addEventListener('click', function () {
+        const roomName = this.closest('.room').querySelector('h1').textContent;
+        const modal = document.createElement("div");
+        modal.className = "modal-backdrop";
+        modal.innerHTML = `
+          <span class="close-btn">×</span>
+          <img src="${this.src}" class="modal-img" />
+        `;
+        document.body.appendChild(modal);
+        modal.addEventListener('click', function (e) {
+          if (e.target === modal || e.target.classList.contains('close-btn')) {
+            modal.remove();
+          }
         });
+
+        //Dergo kerkesen AJAX per ta shtuar dhomen ne listen e dhomave
+        fetch('add_viewed_room.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ roomName: roomName }),
+        })
+        .then(response => response.json())
+        .then(result => {
+          if (result.success) {
+            console.log('Room added to viewed rooms:', roomName);
+            updateViewedRooms(roomName);
+          } else {
+            console.error('Error:', result.error);
+          }
+        })
+        .catch(error => {
+          console.error('Request failed:', error);
+        });
+      });
     });
-    </script>
-<script>
-document.querySelectorAll('.heart').forEach(heart => {
-    heart.addEventListener('click', async function () {
+
+    //Funksion per te ndryshuar ne menyre dinamike listen e dhomave te vizituara
+    function updateViewedRooms(roomName) {
+      let viewedRoomsContainer = document.querySelector('.viewed-rooms-container');
+      if (!viewedRoomsContainer) {
+        //Nese  nuk ekziston conatineri viewed-rooms krijoje nje
+        viewedRoomsContainer = document.createElement('div');
+        viewedRoomsContainer.className = 'viewed-rooms-container';
+        viewedRoomsContainer.innerHTML = '<span>Visited rooms: </span>';
+        const footer = document.querySelector('footer');
+        document.body.insertBefore(viewedRoomsContainer, footer);
+      }
+
+      //Merre listen akutale 
+      const span = viewedRoomsContainer.querySelector('span');
+      let currentRooms = span.textContent.replace('Visited rooms: ', '').split(', ').filter(room => room !== '');
+     //Shtoje dhomen nese nuk eshte ne liste
+      if (!currentRooms.includes(roomName)) {
+        currentRooms.push(roomName);
+        span.textContent = `Visited rooms: ${currentRooms.join(', ')}`;
+      }
+    }
+
+    document.querySelectorAll('.heart').forEach(heart => {
+      heart.addEventListener('click', async function () {
         const roomName = this.getAttribute('data-room-name');
         const isLiked = this.classList.contains('liked');
         const action = isLiked ? 'unlike' : 'like';
 
         try {
-            const response = await fetch('manage_likes.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ roomName, action }),
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                if (action === 'like') {
-                    this.classList.add('liked');
-                    const audio = document.getElementById('likeAudio');
-                    audio.play();
-                } else {
-                    this.classList.remove('liked');
-                }
-            } else {
-                console.error('Error:', result.error);
-            }
-        } catch (error) {
-            console.error('Request failed:', error);
-        }
-    });
-});
-document.getElementById('clearLikes').addEventListener('click', async function () {
-    if (!confirm('A jeni i sigurt që doni të fshini të gjitha pëlqimet?')) return;
-
-    try {
-        const response = await fetch('clear_likes.php', {
+          const response = await fetch('manage_likes.php', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+              'Content-Type': 'application/json',
             },
+            body: JSON.stringify({ roomName, action }),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            if (action === 'like') {
+              this.classList.add('liked');
+              const audio = document.getElementById('likeAudio');
+              audio.play();
+            } else {
+              this.classList.remove('liked');
+            }
+          } else {
+            console.error('Error:', result.error);
+          }
+        } catch (error) {
+          console.error('Request failed:', error);
+        }
+      });
+    });
+
+    document.getElementById('clearLikes').addEventListener('click', async function () {
+      if (!confirm('A jeni i sigurt që doni të fshini të gjitha pëlqimet?')) return;
+
+      try {
+        const response = await fetch('clear_likes.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         });
 
         const result = await response.json();
         if (result.success) {
-            // Hiq klasën 'liked' nga të gjitha zemrat
-            document.querySelectorAll('.heart').forEach(heart => {
-                heart.classList.remove('liked');
-            });
-            alert('Të gjitha pëlqimet u fshinë me sukses!');
+          document.querySelectorAll('.heart').forEach(heart => {
+            heart.classList.remove('liked');
+          });
+          alert('Të gjitha pëlqimet u fshinë me sukses!');
         } else {
-            console.error('Error:', result.error);
-            alert('Dështoi fshirja e pëlqimeve: ' + result.error);
+          console.error('Error:', result.error);
+          alert('Dështoi fshirja e pëlqimeve: ' + result.error);
         }
-    } catch (error) {
+      } catch (error) {
         console.error('Request failed:', error);
         alert('Ndodhi një gabim gjatë fshirjes së pëlqimeve.');
+      }
+    });
+
+    const clearViewedRoomsBtn = document.getElementById('clearViewedRooms');
+    if (clearViewedRoomsBtn) {
+      clearViewedRoomsBtn.addEventListener('click', async function () {
+        if (!confirm('A jeni i sigurt që doni të pastroni listën e dhomave të shikuara?')) return;
+
+        try {
+          const response = await fetch('clear_viewed_rooms.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          const result = await response.json();
+          if (result.success) {
+            const viewedRoomsContainer = document.querySelector('.viewed-rooms-container');
+            if (viewedRoomsContainer) {
+              viewedRoomsContainer.remove();
+            }
+            alert('Lista e dhomave të shikuara u pastrua me sukses!');
+          } else {
+            console.error('Error:', result.error);
+            alert('Dështoi pastrimi i listës: ' + result.error);
+          }
+        } catch (error) {
+          console.error('Request failed:', error);
+          alert('Ndodhi një gabim gjatë pastrimit të listës.');
+        }
+      });
     }
-});
-</script>
+  </script>
 </body>
 </html>
