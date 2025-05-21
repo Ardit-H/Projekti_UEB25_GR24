@@ -30,7 +30,7 @@ CREATE TABLE flight_assistance (
     user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
     flight_number VARCHAR(4),
     created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    arrival_time TIMESTAMP,
+    arrival_time TIMESTAMP NULL,
     additional_route VARCHAR(400)
 );
 
