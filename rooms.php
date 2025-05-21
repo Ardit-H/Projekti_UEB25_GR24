@@ -71,6 +71,9 @@ protected function description(){
 
 }
     public function displayRoom(){
+      // Merr vargun e pëlqimeve nga cookie
+    $likedRooms = isset($_COOKIE['liked_rooms']) ? json_decode($_COOKIE['liked_rooms'], true) : [];
+    $isLiked = in_array($this->name, $likedRooms) ? 'liked' : '';
      echo" <div class='room'>";
      echo "<h1 style='color: #f5c518; justify-content: center; text-align: center; padding: 20px;'>" . htmlspecialchars($this->name) . "</h1>";
 
@@ -87,7 +90,7 @@ echo "</div>";
 //right
 echo "<div style='flex: 1; text-align: right;'>";
 echo "<div style='display: flex; justify-content: flex-end; align-items: center;height:30px; gap:7px'>";
-echo "<p class='heart'>&#10084;</p>";
+echo "<p class='heart $isLiked' data-room-name='" . htmlspecialchars($this->name) . "'>❤</p>";
 echo "<p class='rating' >Rating: " . $this->rating . "★</p>";
 echo "</div>";
 echo "<h3 class='price'>Price: " . CURRENCY . number_format($this->price, 2) . " per night</h3>";
@@ -408,15 +411,37 @@ if (isset($_GET['filter'])) {
         });
     });
     </script>
-    <script>
+<script>
 document.querySelectorAll('.heart').forEach(heart => {
-    heart.addEventListener('click', function () {
-        if (!this.classList.contains('liked')) {
-            this.classList.add('liked');
-            var audio = document.getElementById('likeAudio');
-            audio.play();
-        } else {
-            this.classList.remove('liked');
+    heart.addEventListener('click', async function () {
+        const roomName = this.getAttribute('data-room-name');
+        const isLiked = this.classList.contains('liked');
+        const action = isLiked ? 'unlike' : 'like';
+
+        try {
+            const response = await fetch('manage_likes.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ roomName, action }),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                if (action === 'like') {
+                    this.classList.add('liked');
+                    const audio = document.getElementById('likeAudio');
+                    audio.play();
+                } else {
+                    this.classList.remove('liked');
+                }
+            } else {
+                console.error('Error:', result.error);
+            }
+        } catch (error) {
+            console.error('Request failed:', error);
         }
     });
 });
