@@ -1,5 +1,47 @@
 
 <?php
+//Numerimi i vizitave ne faqen rooms.php
+session_start();
+require_once("database.php");
+
+if (isset($_SESSION['user_id'])&& isset($_SESSION['roli']) && $_SESSION['roli'] === 'user') {
+    $userId = $_SESSION['user_id'];
+
+    // Kontrollo nëse ekziston një rekord për këtë user
+    $stmt = $conn->prepare("SELECT * FROM user_visits WHERE user_id = ?");
+    if ($stmt) {
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result && $result->num_rows > 0) {
+            // Update: rrit numrin e vizitave dhe përditëso kohën
+            $updateStmt = $conn->prepare("UPDATE user_visits SET visit_count = visit_count + 1, last_visit = NOW() WHERE user_id = ?");
+            if ($updateStmt) {
+                $updateStmt->bind_param("i", $userId);
+                $updateStmt->execute();
+                $updateStmt->close();
+            } else {
+                die("Gabim ne UPDATE prepare: " . $conn->error);
+            }
+        } else {
+            // Insert: regjistro vizitën e parë
+            $insertStmt = $conn->prepare("INSERT INTO user_visits (user_id, visit_count) VALUES (?, 1)");
+            if ($insertStmt) {
+                $insertStmt->bind_param("i", $userId);
+                $insertStmt->execute();
+                $insertStmt->close();
+            } else {
+                die("Gabim ne INSERT prepare: " . $conn->error);
+            }
+        }
+
+        $stmt->close();
+    } else {
+        die("Gabim ne SELECT prepare: " . $conn->error);
+    }
+}
+
 define("CURRENCY","$");
 class Room{
   protected $name;
@@ -11,6 +53,9 @@ class Room{
       $this->price=$price;
       $this->images=$images;
       $this->rating = $rating;
+    }
+    public function getName() {
+        return $this->name;
     }
     public function getRating() {
       return $this->rating;
@@ -29,14 +74,12 @@ protected function description(){
 
 }
     public function displayRoom(){
+      // Merr vargun e pëlqimeve nga cookie
+    $likedRooms = isset($_COOKIE['liked_rooms']) ? json_decode($_COOKIE['liked_rooms'], true) : [];
+    $isLiked = in_array($this->name, $likedRooms) ? 'liked' : '';
      echo" <div class='room'>";
      echo "<h1 style='color: #f5c518; justify-content: center; text-align: center; padding: 20px;'>" . htmlspecialchars($this->name) . "</h1>";
-  //    echo "<div class='photo-gallery' style='margin-bottom: 10px;'>"; 
 
-  //    foreach ($this->images as $image) {
-  //     echo "<img src='foto/" . htmlspecialchars($image) . "' alt='" . htmlspecialchars($this->name) . "'>";
-  //    }
-  // echo "</div>";
       $this->displayPhotos();
   echo "<div class='room-details' style='display: flex; justify-content: space-between; align-items: center; padding: 0 20px;'>";
   //left
@@ -50,7 +93,7 @@ echo "</div>";
 //right
 echo "<div style='flex: 1; text-align: right;'>";
 echo "<div style='display: flex; justify-content: flex-end; align-items: center;height:30px; gap:7px'>";
-echo "<p class='heart'>&#10084;</p>";
+echo "<p class='heart $isLiked' data-room-name='" . htmlspecialchars($this->name) . "'>❤</p>";
 echo "<p class='rating' >Rating: " . $this->rating . "★</p>";
 echo "</div>";
 echo "<h3 class='price'>Price: " . CURRENCY . number_format($this->price, 2) . " per night</h3>";
@@ -192,6 +235,13 @@ if (isset($_GET['filter'])) {
       });
   }
 }
+
+//Dhomat e vizituara
+if (isset($_SESSION['user_id'])) {
+    if (!isset($_SESSION['viewed_rooms'])) {
+        $_SESSION['ទ_rooms'] = [];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -322,6 +372,58 @@ if (isset($_GET['filter'])) {
 .heart.liked {
     color: red;
 }
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px auto;
+    padding: 10px;
+    border-radius: 15px;
+    max-width: 1000px;
+}
+
+.filter-container form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-container .clear-likes-btn,
+.filter-container .clear-viewed-btn {
+    margin-left: 10px;
+}
+
+.clear-likes-btn {
+    background-color: #f5c518;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.clear-likes-btn:hover {
+    background-color: #e4b00f;
+    transform: scale(1.05);
+}
+.clear-viewed-btn {
+    background-color: #f5c518;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-left: 10px; /* Hapësirë mes butonit të pëlqimeve dhe këtij butoni */
+}
+
+.clear-viewed-btn:hover {
+    background-color: #e4b00f;
+    transform: scale(1.05);
+}
     </style>
 </head>
 <body>
@@ -334,142 +436,190 @@ if (isset($_GET['filter'])) {
     </div>
   </main>
   
-  <form method="GET" action="">
-    <label for="filter">Filter by:</label>
-    <select name="filter" id="filter">
-        <option value="price" <?php if (isset($_GET['filter']) && $_GET['filter'] == 'price') echo 'selected'; ?>>Price</option>
-        <option value="rating" <?php if (isset($_GET['filter']) && $_GET['filter'] == 'rating') echo 'selected'; ?>>Rating</option>
-    </select>
-    <input type="submit" value="Apply Filter">
-  </form>
-  
+<div class="filter-container">
+    <form method="GET" action="">
+        <label for="filter">Filter by:</label>
+        <select name="filter" id="filter">
+            <option value="price" <?php if (isset($_GET['filter']) && $_GET['filter'] == 'price') echo 'selected'; ?>>Price</option>
+            <option value="rating" <?php if (isset($_GET['filter']) && $_GET['filter'] == 'rating') echo 'selected'; ?>>Rating</option>
+        </select>
+        <input type="submit" value="Apply Filter">
+    </form>
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <button id="clearLikes" class="clear-likes-btn">Remove all likes</button>
+        <button id="clearViewedRooms" class="clear-viewed-btn">Clear Viewed Rooms</button>
+    <?php endif; ?>
+</div>
   
   <?php
   foreach ($rooms as $room) {
     $room->displayRoom();
   }
+  //Lista e dhomave te vizituara nga perdoruesi
   ?>
-<!-- <div class="room">
-    <h1 style="color: #f5c518; justify-content: center; text-align: center; padding: 20px;"> Standard Room </h1>
-    <div class="photo-gallery" style="margin-bottom: 10px;"> 
-      <img src="foto/standard room1.jpg" alt="Amanpuri Resort 1">
-      <img src="foto/Aman_Amanpuri_Dining_2_0.webp" alt="Amanpuri Resort 2">
-      <img src="foto/standard room.jpg" alt="Amanpuri Resort 3">
-      <img src="foto/Aman_Amanpuri_Dining_7_0.webp" alt="Amanpuri Resort 4">
+  <?php if (isset($_SESSION['user_id']) && isset($_SESSION['viewed_rooms']) && !empty($_SESSION['viewed_rooms'])): ?>
+    <div class="viewed-rooms-container">
+      <span>Visited rooms: <?php echo htmlspecialchars(implode(', ', $_SESSION['viewed_rooms'])); ?></span>
     </div>
-    <div style="text-align: center;">
-      <a href="book.html">
-      <button class="book-now-button" style="background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;">
-        Book Now
-      </button>
-    </a>
-      <h3 style="color: #000000;">Price: $250 per night</h3>
-    </div>
-  </div>
-
-  <div class="room">
-    <h1 style="color: #f5c518; justify-content: center; text-align: center; padding: 20px;"> Luxory Room </h1>
-    <div class="photo-gallery" style="margin-bottom: 10px;"> 
-      <img src="foto/luxoryroom1.jpg" alt="Amanpuri Resort 1">
-      <img src="foto/luxoryroom2.jpg" alt="Amanpuri Resort 2">
-      <img src="foto/luxoryroom3.jpg" alt="Amanpuri Resort 3">
-      <img src="foto/luxoryroom4.jpg" alt="Amanpuri Resort 4">
-    </div>
-    <div style="text-align: center;">
-      <a href="book.html">
-      <button class="book-now-button" style="background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;">
-        Book Now
-      </button>
-    </a>
-      <h3 style="color: #000000;">Price: $1500 per night</h3>
-    </div>
-  </div>
-
-  <div class="room">
-    <h1 style="color: #f5c518; justify-content: center; text-align: center; padding: 20px;"> Private Villas </h1>
-    <div class="photo-gallery" style="margin-bottom: 10px; align-items: center;"> 
-      <img src="foto/villat1.jpg" alt="Amanpuri Resort 1">
-      <img src="foto/villat2.jpg" alt="Amanpuri Resort 2">
-      <img src="foto/villat3.jpg" alt="Amanpuri Resort 3">
-      <img src="foto/villat4.jpg" alt="Amanpuri Resort 4">
-    </div>
-    <div style="text-align: center;">
-      <a href="book.html">
-      <button class="book-now-button" style="background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;">
-        Book Now
-      </button>
-    </a>
-      <h3 style="color: #000000;">Price: $900 per night</h3>
-    </div>
-  </div>
-  <div class="room">
-    <h1 style="color: #f5c518; justify-content: center; text-align: center; padding: 20px;"> Family Room </h1>
-    <div class="photo-gallery" style="margin-bottom: 10px; align-items: center;"> 
-      <img src="foto/familyroom1.jpg" alt="Amanpuri Resort 1">
-      <img src="foto/familyroom2.jpg" alt="Amanpuri Resort 2">
-      <img src="foto/familyroom3.jpg" alt="Amanpuri Resort 3">
-      <img src="foto/familyroom4.jpg" alt="Amanpuri Resort 4">
-    </div>
-    <div style="text-align: center;">
-      <a href="book.html">
-      <button class="book-now-button" style="background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;">
-        Book Now
-      </button>
-    </a>
-      <h3 style="color: #000000;">Price: $750 per night</h3>
-    </div>
-  </div>
-  <div class="room">
-    <h1 style="color: #f5c518; justify-content: center; text-align: center; padding: 20px;"> Wellness Suite </h1>
-    <div class="photo-gallery" style="margin-bottom: 10px; align-items: center;"> 
-      <img src="foto/wellnesssuite1.jpg" alt="Amanpuri Resort 1">
-      <img src="foto/wellnesssuite2.jpg" alt="Amanpuri Resort 2">
-      <img src="foto/wellnesssuite3.jpg" alt="Amanpuri Resort 3">
-      <img src="foto/wellnesssuite4.jpg" alt="Amanpuri Resort 4">
-    </div>
-    <div style="text-align: center;">
-      <a href="book.html">
-      <button class="book-now-button" style="background-color: #f5c518; padding: 15px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;">
-        Book Now
-      </button>
-    </a>
-      <h3 style="color: #000000;">Price: $1250 per night</h3>
-    </div>
-  </div> -->
+ 
+<?php endif; ?>
   <audio id="likeAudio" src="Like-audio.mp3.mp3" preload="auto"></audio>
   <?php 
   include("footer.php");
   ?>
  <script>
     document.querySelectorAll('.photo-gallery img').forEach(img => {
-        img.addEventListener('click', function () {
-            const modal = document.createElement("div");
-            modal.className = "modal-backdrop";
-            modal.innerHTML = `
-                <span class="close-btn">&times;</span>
-                <img src="${this.src}" class="modal-img" />
-            `;
-            document.body.appendChild(modal);
-            modal.addEventListener('click', function (e) {
-                if (e.target === modal || e.target.classList.contains('close-btn')) {
-                    modal.remove();
-                }
-            });
+      img.addEventListener('click', function () {
+        const roomName = this.closest('.room').querySelector('h1').textContent;
+        const modal = document.createElement("div");
+        modal.className = "modal-backdrop";
+        modal.innerHTML = `
+          <span class="close-btn">×</span>
+          <img src="${this.src}" class="modal-img" />
+        `;
+        document.body.appendChild(modal);
+        modal.addEventListener('click', function (e) {
+          if (e.target === modal || e.target.classList.contains('close-btn')) {
+            modal.remove();
+          }
         });
+
+        //Dergo kerkesen AJAX per ta shtuar dhomen ne listen e dhomave
+        fetch('add_viewed_room.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ roomName: roomName }),
+        })
+        .then(response => response.json())
+        .then(result => {
+          if (result.success) {
+            console.log('Room added to viewed rooms:', roomName);
+            updateViewedRooms(roomName);
+          } else {
+            console.error('Error:', result.error);
+          }
+        })
+        .catch(error => {
+          console.error('Request failed:', error);
+        });
+      });
     });
-    </script>
-    <script>
-document.querySelectorAll('.heart').forEach(heart => {
-    heart.addEventListener('click', function () {
-        if (!this.classList.contains('liked')) {
-            this.classList.add('liked');
-            var audio = document.getElementById('likeAudio');
-            audio.play();
-        } else {
-            this.classList.remove('liked');
+
+    //Funksion per te ndryshuar ne menyre dinamike listen e dhomave te vizituara
+    function updateViewedRooms(roomName) {
+      let viewedRoomsContainer = document.querySelector('.viewed-rooms-container');
+      if (!viewedRoomsContainer) {
+        //Nese  nuk ekziston conatineri viewed-rooms krijoje nje
+        viewedRoomsContainer = document.createElement('div');
+        viewedRoomsContainer.className = 'viewed-rooms-container';
+        viewedRoomsContainer.innerHTML = '<span>Visited rooms: </span>';
+        const footer = document.querySelector('footer');
+        document.body.insertBefore(viewedRoomsContainer, footer);
+      }
+
+      //Merre listen akutale 
+      const span = viewedRoomsContainer.querySelector('span');
+      let currentRooms = span.textContent.replace('Visited rooms: ', '').split(', ').filter(room => room !== '');
+     //Shtoje dhomen nese nuk eshte ne liste
+      if (!currentRooms.includes(roomName)) {
+        currentRooms.push(roomName);
+        span.textContent = `Visited rooms: ${currentRooms.join(', ')}`;
+      }
+    }
+
+    document.querySelectorAll('.heart').forEach(heart => {
+      heart.addEventListener('click', async function () {
+        const roomName = this.getAttribute('data-room-name');
+        const isLiked = this.classList.contains('liked');
+        const action = isLiked ? 'unlike' : 'like';
+
+        try {
+          const response = await fetch('manage_likes.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ roomName, action }),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            if (action === 'like') {
+              this.classList.add('liked');
+              const audio = document.getElementById('likeAudio');
+              audio.play();
+            } else {
+              this.classList.remove('liked');
+            }
+          } else {
+            console.error('Error:', result.error);
+          }
+        } catch (error) {
+          console.error('Request failed:', error);
         }
+      });
     });
-});
-</script>
+
+    document.getElementById('clearLikes').addEventListener('click', async function () {
+      if (!confirm('A jeni i sigurt që doni të fshini të gjitha pëlqimet?')) return;
+
+      try {
+        const response = await fetch('clear_likes.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          document.querySelectorAll('.heart').forEach(heart => {
+            heart.classList.remove('liked');
+          });
+          alert('Të gjitha pëlqimet u fshinë me sukses!');
+        } else {
+          console.error('Error:', result.error);
+          alert('Dështoi fshirja e pëlqimeve: ' + result.error);
+        }
+      } catch (error) {
+        console.error('Request failed:', error);
+        alert('Ndodhi një gabim gjatë fshirjes së pëlqimeve.');
+      }
+    });
+
+    const clearViewedRoomsBtn = document.getElementById('clearViewedRooms');
+    if (clearViewedRoomsBtn) {
+      clearViewedRoomsBtn.addEventListener('click', async function () {
+        if (!confirm('A jeni i sigurt që doni të pastroni listën e dhomave të shikuara?')) return;
+
+        try {
+          const response = await fetch('clear_viewed_rooms.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          const result = await response.json();
+          if (result.success) {
+            const viewedRoomsContainer = document.querySelector('.viewed-rooms-container');
+            if (viewedRoomsContainer) {
+              viewedRoomsContainer.remove();
+            }
+            alert('Lista e dhomave të shikuara u pastrua me sukses!');
+          } else {
+            console.error('Error:', result.error);
+            alert('Dështoi pastrimi i listës: ' + result.error);
+          }
+        } catch (error) {
+          console.error('Request failed:', error);
+          alert('Ndodhi një gabim gjatë pastrimit të listës.');
+        }
+      });
+    }
+  </script>
 </body>
 </html>
