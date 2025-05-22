@@ -14,13 +14,19 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     if ($result->num_rows === 1){
         $user = $result->fetch_assoc();
 
-        $hashed_input_password = hash('sha256', $user['salt'] . $password);
+        echo "Salt: {$user['salt']}<br>";
+        echo "Salted Hash: {$user['hashed_password']}<br>";
 
+        $hashed_input_password = hash('sha256', $user['salt'] . $password);
+        echo "Pas login: <br>" . $hashed_input_password;
         if ($hashed_input_password === $user['hashed_password']) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['roli'] = $user['roli'];
             $_SESSION['firstname'] = $user['firstname'];
+            $_SESSION['lastname'] = $user['lastname'];
+            $_SESSION['email'] = $user['email'];
+            $_SESSION['phone'] = $user['phone'];
 
             if ($user['roli'] === 'admin') {
                 // header('Location: admin_dashboard.php');
