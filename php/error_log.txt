@@ -1,0 +1,1 @@
+Error [2] in C:\xampp\htdocs\Projekti_UEB25_GR24\php\submitRequest.php row 11: Undefined variable $undefined_variable
