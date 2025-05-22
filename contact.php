@@ -1,3 +1,6 @@
+<?php
+  session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -35,13 +38,21 @@
           <div class="form">
             <form id="flight" action="php/submitRequest.php" method="POST">
               <label>Name:</label>
-              <input type="text" name="name" placeholder="Name" required />
+              <input 
+              type="text" 
+              name="name" 
+              placeholder="Name" required 
+              readonly 
+              value="<?php echo isset($_SESSION['firstname']) ? htmlspecialchars($_SESSION['firstname']) : ''; ?>"
+              />
               <label>Last Name:</label>
               <input
                 type="text"
                 name="lastname"
                 placeholder="Lastname"
                 required
+                readonly 
+                 value="<?php echo isset($_SESSION['lastname']) ? htmlspecialchars($_SESSION['lastname']) : ''; ?>"
               />
               <label>Email:</label>
               <input
@@ -49,6 +60,8 @@
                 name="email"
                 placeholder="name@gmail.com"
                 required
+                readonly 
+                 value="<?php echo isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : ''; ?>"
               />
               <label>Phone Number:</label>
               <input
@@ -58,6 +71,8 @@
                 pattern="[+0-9]{1,15}"
                 maxlength="15"
                 required
+                readonly
+                 value="<?php echo isset($_SESSION['phone']) ? htmlspecialchars($_SESSION['phone']) : ''; ?>"
               />
               <label>Flight Number:</label>
               <input
