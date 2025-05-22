@@ -130,7 +130,7 @@ $reservations = $conn->query("
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
-                <tr><td colspan="5" style="text-align:center;">Nuk ka rezervime të fundit</td></tr>
+                <tr><td colspan="5" style="text-align:center;">No recent reservations</td></tr>
             <?php endif; ?>
         </tbody>
     </table>
@@ -166,7 +166,7 @@ $userVisits = $conn->query("
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
-                <tr><td colspan="3" style="text-align: center;">Nuk ka vizita të regjistruara.</td></tr>
+                <tr><td colspan="3" style="text-align: center;">There are no recorded visits.</td></tr>
             <?php endif; ?>
         </tbody>
     </table>
