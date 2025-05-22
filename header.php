@@ -66,7 +66,6 @@
         <a href="logout.php">Logout</a>
       <?php else: ?>
         <a href="login.php">Login</a>
-        <a href="signup.php">Sign Up</a>
       <?php endif; ?>
     </div>
     </div>

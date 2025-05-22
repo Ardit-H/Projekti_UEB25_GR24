@@ -151,9 +151,9 @@ $userVisits = $conn->query("
     <table>
         <thead>
             <tr>
-                <th>Emri</th>
-                <th>Numri i Vizitave</th>
-                <th>Vizita e Fundit</th>
+                <th>Name</th>
+                <th>Number of visits</th>
+                <th>Last visit</th>
             </tr>
         </thead>
         <tbody>
