@@ -485,7 +485,7 @@ if (isset($_SESSION['user_id'])) {
         });
 
         //Dergo kerkesen AJAX per ta shtuar dhomen ne listen e dhomave
-        fetch('add_viewed_room.php', {
+        fetch('Rooms/add_viewed_room.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -536,7 +536,7 @@ if (isset($_SESSION['user_id'])) {
         const action = isLiked ? 'unlike' : 'like';
 
         try {
-          const response = await fetch('manage_likes.php', {
+          const response = await fetch('Rooms/manage_likes.php', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -567,7 +567,7 @@ if (isset($_SESSION['user_id'])) {
       if (!confirm('A jeni i sigurt që doni të fshini të gjitha pëlqimet?')) return;
 
       try {
-        const response = await fetch('clear_likes.php', {
+        const response = await fetch('Rooms/clear_likes.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -596,7 +596,7 @@ if (isset($_SESSION['user_id'])) {
         if (!confirm('A jeni i sigurt që doni të pastroni listën e dhomave të shikuara?')) return;
 
         try {
-          const response = await fetch('clear_viewed_rooms.php', {
+          const response = await fetch('Rooms/clear_viewed_rooms.php', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

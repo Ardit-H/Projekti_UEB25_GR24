@@ -1,6 +1,6 @@
 <?php
 header("Content-Type: application/json");
-include_once("../database.php");
+include_once("../../database.php");
 
 $response = ["success" => false];
 

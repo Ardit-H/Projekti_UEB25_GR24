@@ -1,5 +1,5 @@
 <?php
-include_once("database.php"); 
+include_once("../database.php"); 
 
 $sql = "SELECT 
             br.id AS booking_id,

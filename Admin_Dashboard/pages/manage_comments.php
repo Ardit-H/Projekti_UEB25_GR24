@@ -1,5 +1,5 @@
 <?php
-include_once(__DIR__ . "/../database.php");
+include_once(__DIR__ . "/../../database.php");
 
 // Fshirja e një komenti
 if (isset($_GET['delete_id'])) {

@@ -1,5 +1,5 @@
 <?php
-include_once(__DIR__ . "/../database.php");
+include_once(__DIR__ . "/../../database.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $commentId = intval($_POST['id'] ?? 0);

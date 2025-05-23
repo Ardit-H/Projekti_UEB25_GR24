@@ -61,7 +61,7 @@
         <span class="user-icon">🔓</span>
         <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
          <?php if (isset($_SESSION['roli']) && $_SESSION['roli'] === 'admin'): ?>
-            <a href="admin_dashboard.php">Admin Panel</a>
+            <a href="Admin_Dashboard/admin_dashboard.php">Admin Panel</a>
          <?php endif; ?>
         <a href="logout.php">Logout</a>
       <?php else: ?>
