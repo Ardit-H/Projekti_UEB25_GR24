@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +10,35 @@
 </head>
 <body>
 <?php 
-  include("header.php");
+
+  include("database.php");
+  include("database.php");
+
+$user_id = $_SESSION['user_id'];
+echo $user_id;
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['visitor_comment']) && !empty($_POST['visitor_name'])) {
+
+    $newComment = trim($_POST['visitor_comment']);
+    $newName = trim($_POST['visitor_name']);
+
+    $stmt = $conn->prepare("INSERT INTO comments (user_id, comment, name) VALUES (?, ?, ?)");
+    $stmt->bind_param("iss", $user_id, $newComment, $newName);
+    $stmt->execute();
+    $stmt->close();
+
+    header("Location: about.php");
+    exit();
+}
+$sql = "
+    SELECT name, comment
+    FROM comments    
+";
+
+$result = $conn->query($sql);
+
+ include("header.php"); 
+
   ?>
 
   <main >
@@ -49,24 +78,21 @@
 </div>
 
 <?php
-$visitorComments = [
-    "Elira" => ["comment" => "Absolutely loved the peaceful atmosphere!", "date" => "2024-06-15"],
-    "Blerim" => ["comment" => "The staff was incredibly welcoming.", "date" => "2023-12-01"],
-    "Ardita" => ["comment" => "Amazing views and great food!", "date" => "2024-02-20"],
-    "Gent"   => ["comment" => "A perfect place to disconnect from everything.", "date" => "2023-11-05"]
-];
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['visitor_name']) && !empty($_POST['visitor_comment'])) {
-    $newName = htmlspecialchars(trim($_POST['visitor_name']));
-    $newComment = htmlspecialchars(trim($_POST['visitor_comment']));
-    $today = date("Y-m-d");
 
-  
-    $visitorComments = array_merge(
-        [$newName => ["comment" => $newComment, "date" => $today]],
-        $visitorComments
-    );
+
+  $visitorComments = [];
+    
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $name = $row['name'] ?? "Anonymous";
+        $visitorComments[$name] = [
+            "comment" => $row['comment'],
+            "date" => date("Y-m-d")
+        ];
+    }
 }
+$conn->close();
 
 
 if (isset($_GET['commentsort'])) {
