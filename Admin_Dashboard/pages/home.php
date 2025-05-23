@@ -120,12 +120,20 @@ $reservations = $conn->query("
         <tbody>
             <?php if (count($reservations) > 0): ?>
                 <?php foreach ($reservations as $row): ?>
+                 <?php
+                $checkin = new DateTime($row['check_in_time']);
+                $checkout = new DateTime($row['check_out_time']);
+                $interval = $checkin->diff($checkout);
+                $numOfDays = $interval->days;
+                $totalPrice = $numOfDays * $row['room_price'];
+                $formattedPrice = number_format($totalPrice, 2);
+                ?>
                     <tr style="text-align: center;">
                         <td><?= htmlspecialchars($row['firstname'] . ' ' . $row['lastname']) ?></td>
                         <td><?= htmlspecialchars($row['check_in_time']) ?></td>
                         <td><?= htmlspecialchars($row['check_out_time']) ?></td>
                         <td><?= htmlspecialchars($row['room_name']) ?></td>
-                        <td>€<?= number_format($row['room_price'], 2) ?></td>
+                        <td>€<?= htmlspecialchars($formattedPrice) ?></td>
  
                     </tr>
                 <?php endforeach; ?>
