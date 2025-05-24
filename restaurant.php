@@ -66,20 +66,26 @@
       <img src="foto/Terrace5.jpg" alt="Terrace">
       <img src="foto/Terrace8.jpg" alt="Terrace">
   </div>
-   <?php 
-   $totalMeals = 100;
-   $seafood = 30;
-   $meat = 20;
-   $sushi = 20;
-   $burgers = 18;
-   $pizza = 12;
+  <?php 
+  $totalMeals = 100;
+  $seafood = 30;
+  $meat = 20;
+  $sushi = 20;
+  $burgers = 18;
+  $pizza = 12;
 
-   $seafoodpercent = ($seafood / $totalMeals) * 100;
-   $meatpercent = ($meat / $totalMeals) * 100;
-   $sushipercent = ($sushi / $totalMeals) * 100;
-   $burgerspercent = ($burgers / $totalMeals) * 100;
-   $pizzapercent = ($pizza / $totalMeals) * 100;
-   ?>
+
+  function llogaritPerqindje(&$kategori, $total){
+    $kategori = ($kategori / $total) * 100;
+  }
+
+
+  llogaritPerqindje($seafood, $totalMeals);
+  llogaritPerqindje($meat, $totalMeals);
+  llogaritPerqindje($sushi, $totalMeals);
+  llogaritPerqindje($burgers, $totalMeals);
+  llogaritPerqindje($pizza, $totalMeals);
+  ?>
 
    <style>
     .menu-breakdown{
@@ -126,23 +132,23 @@
       <h3>🍽️ Menu Breakdown by Category</h3>
       <div class="category">
         <div><span class="icon">🐟</span>Seafood</div>
-        <span><?php echo round($seafoodpercent); ?>%</span>
+        <span><?php echo round($seafood); ?>%</span>
       </div>
       <div class="category">
         <div><span class="icon">🥩</span>Meat</div>
-        <span><?php echo round($meatpercent); ?>%</span>
+        <span><?php echo round($meat); ?>%</span>
       </div>
       <div class="category">
         <div><span class="icon">🍣</span>Sushi</div>
-        <span><?php echo round($sushipercent); ?>%</span>
+        <span><?php echo round($sushi); ?>%</span>
       </div>
       <div class="category">
         <div><span class="icon">🍔</span>Burgers</div>
-        <span><?php echo round($burgerspercent); ?>%</span>
+        <span><?php echo round($burgers); ?>%</span>
       </div>
       <div class="category">
         <div><span class="icon">🍕</span>Pizza</div>
-        <span><?php echo round($pizzapercent); ?>%</span>
+        <span><?php echo round($pizza); ?>%</span>
       </div>
   </div>
 
@@ -159,12 +165,20 @@
   </div>
   <?php
   if(isset($_POST['submit'])){
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $date = $_POST['date'];
-    $time = $_POST['time'];
-    $people = $_POST['people'];
+  $name = $email = $phone = $date = $time = $people = "";
+
+  $fields = [
+    'name'   => &$name,
+    'email'  => &$email,
+    'phone'  => &$phone,
+    'date'   => &$date,
+    'time'   => &$time,
+    'people' => &$people
+  ];
+
+  foreach($fields as $key => &$value){
+    $value = $_POST[$key] ?? '';
+  }
 
   
 
