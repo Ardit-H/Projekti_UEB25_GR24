@@ -37,10 +37,18 @@ if (!$result) {
         </thead>
         <tbody>
             <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                <?php
+                $checkin = new DateTime($row['check_in_time']);
+                $checkout = new DateTime($row['check_out_time']);
+                $interval = $checkin->diff($checkout);
+                $numOfDays = $interval->days;
+                $totalPrice = $numOfDays * $row['room_price'];
+                $formattedPrice = number_format($totalPrice, 2);
+                ?>
                 <tr>
                     <td><?= htmlspecialchars($row['booking_id']) ?></td>
                     <td><?= htmlspecialchars($row['room_name']) ?></td>
-                    <td><?= htmlspecialchars($row['room_price']) ?></td>
+                    <td><?= htmlspecialchars($formattedPrice) ?></td>
                     <td><?= htmlspecialchars($row['firstname'] . ' ' . $row['lastname']) ?> (<?= htmlspecialchars($row['username']) ?>)</td>
                     <td><?= htmlspecialchars($row['check_in_time']) ?></td>
                     <td><?= htmlspecialchars($row['check_out_time']) ?></td>

@@ -1,5 +1,6 @@
 <?php
     require_once("../database.php");
+    include("php/handle_send_email.php");
     session_start();
     
     if (isset($_POST['submit'])) {
@@ -48,6 +49,8 @@
 
         $stmt->bind_param("iiss", $user_id, $room_id, $checkin, $checkout);
         if ($stmt->execute()) {
+            //          $message="You reserved room: $room from $checkin to $checkout.";
+            //          sendEmail("You have reserved a room in Amanpuri hotel",$message);           // gjendet tek file handle_send_email
             header("Location: ../book.php?success=1");
             exit();
         } else {
@@ -57,9 +60,3 @@
         $stmt->close();
     }
 ?>
-            <!-- 
-            'Standard Room' => 250,
-            'Family Room' => 750,
-            'Private Villas' => 900,
-            'Wellness Suite' => 1250,
-            'Luxury Room' => 1500 -->

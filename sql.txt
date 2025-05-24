@@ -55,3 +55,10 @@ CREATE TABLE user_visits (
     visit_count INTEGER DEFAULT 1,
     last_visit TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT INTO rooms (name, price) VALUES
+    ('Standard Room', 250),
+    ('Family Room', 750),
+    ('Private Villas', 900),
+    ('Wellness Suite', 1250),
+    ('Luxury Room', 1500);

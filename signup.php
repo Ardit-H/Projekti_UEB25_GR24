@@ -95,8 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <input type="text" name="lastname" placeholder="Last Name" required><br>
       <input type="text" name="username" placeholder="Username" required><br>
       <input type="email" name="email" placeholder="Email" required><br>
-      <input type="text" name="phone" placeholder="Phone number" required><br>
-      <input type="text" name="card_number" placeholder="Card Number" required><br>
+      <input type="text" name="phone" placeholder="Phone number" maxlength="16" pattern="(^[+-]?\d{3}-)?\d{3}-?\d{3}-?\d{3}$" required><br>
+      <input type="text" name="card_number" placeholder="Card Number" maxlength="16" pattern="\d{16}" required><br>
       <input type="password" name="password" placeholder="Password" required><br>
       <button type="submit">Sign Up</button>
       <a href="login.php">Already have an account? Login</a>
