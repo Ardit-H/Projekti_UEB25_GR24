@@ -177,8 +177,27 @@
   ];
 
   foreach($fields as $key => &$value){
-    $value = $_POST[$key] ?? '';
+  $input = $_POST[$key] ?? '';
+
+  switch($key) {
+    case 'name':
+    case 'phone':
+      $value = filter_var($input, FILTER_SANITIZE_STRING); 
+      break;
+    case 'email':
+      $value = filter_var($input, FILTER_SANITIZE_EMAIL);
+      break;
+    case 'date':
+    case 'time':
+      $value = htmlspecialchars(trim($input)); 
+      break;
+    case 'people':
+      $value = filter_var($input, FILTER_SANITIZE_NUMBER_INT);
+      break;
+    default:
+      $value = htmlspecialchars(trim($input));
   }
+}
 
   
 
