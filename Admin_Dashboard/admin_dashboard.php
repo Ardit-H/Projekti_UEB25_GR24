@@ -23,6 +23,9 @@ include("sidebar.php");
         case 'comments':
             include("pages/manage_comments.php");
             break;
+        case 'flights':
+            include("pages/manage_flights.php");
+            break;   
         case 'users':
             include("pages/manage_users.php");
             break;
