@@ -40,7 +40,14 @@
   <?php 
   include("header.php");
   ?>
-
+    <?php 
+              if(isset($_SESSION["user_id"])):     
+            if (isset($_GET['success']) && $_GET['success'] == '1') {
+                echo '<div style="color: green; text-align: center; font-size: 1.5rem; margin: 20px;">
+                          Your contact message has been sent successfully!
+                      </div>';
+            }
+?>
     <div class="">
       <div
         style="
@@ -137,6 +144,12 @@
         </div>
       </div>
     </div>
+    <?php else: ?>
+      <div style="text-align: center; padding: 20px; color: red;">
+        <h2>You must be logged in to access the contact form.</h2>
+        <a href="login.php" style="color: blue; text-decoration: underline;">Click here to log in</a>
+      </div> 
+    <?php endif; ?>
 
     <?php 
   include("footer.php");
