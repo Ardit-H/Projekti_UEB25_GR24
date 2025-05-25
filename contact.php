@@ -150,6 +150,44 @@
         <a href="login.php" style="color: blue; text-decoration: underline;">Click here to log in</a>
       </div> 
     <?php endif; ?>
+    <div style="margin: 20px auto; width: 90%; text-align: center;">
+        <h3 style="color: white;">Update Notes for a Flight</h3>
+        <label for="flightNumberInput" style="color: white;">Flight Number:</label>
+        <input type="text" id="flightNumberInput" placeholder="Enter Flight Number" maxlength="4" style="padding: 5px; margin: 10px;">
+        <br>
+        <label for="notesInput" style="color: white;">Notes:</label>
+        <textarea id="notesInput" placeholder="Enter your notes" style="padding: 5px; margin: 10px; width: 50%;"></textarea>
+        <br>
+        <button id="updateNotesButton" style="padding: 10px 20px; background-color: #ffde65; border: none; cursor: pointer;">Update Notes</button>
+    </div>
+    
+    <script>
+        $(document).ready(function () {
+            $("#updateNotesButton").click(function () {
+                const flightNumber = $("#flightNumberInput").val().trim();
+                const notes = $("#notesInput").val().trim();
+    
+                if (!flightNumber || !notes) {
+                    alert("Please fill in both the Flight Number and Notes fields.");
+                    return;
+                }
+    
+                $.ajax({
+                    url: "php/updateNotes.php",
+                    method: "POST",
+                    data: { flight_number: flightNumber, notes: notes },
+                    success: function (response) {
+                        alert(response);
+                        $("#flightNumberInput").val(""); // Clear input fields
+                        $("#notesInput").val("");
+                    },
+                    error: function () {
+                        alert("An error occurred while updating the notes.");
+                    }
+                });
+            });
+        });
+    </script>
 
     <?php 
   include("footer.php");
@@ -163,6 +201,7 @@
     }, 3000); 
   }
 </script>
+
   </body>
   <script>
  $(document).ready(function () {
@@ -184,4 +223,5 @@
     });
 });
 </script>
+
 </html>
