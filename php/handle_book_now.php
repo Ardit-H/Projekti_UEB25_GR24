@@ -9,10 +9,11 @@
         $lastname=$_POST['lastname'];
         $telefon = $_POST['telefon'];
         $email = $_POST['email'];
-        $checkin = $_POST['checkin'];
-        $checkout = $_POST['checkout'];
-        $room = $_POST['room'];
         $cardnumber = $_POST['cardnumber'];
+        $checkin = filter_input(INPUT_POST, 'checkin', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $checkout = filter_input(INPUT_POST, 'checkout', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $room = filter_input(INPUT_POST, 'room',FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
          
         $today=date('Y-m-d');
         switch(true){
