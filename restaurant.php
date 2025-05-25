@@ -1,3 +1,13 @@
+<?php
+session_start(); 
+require_once("database.php");
+
+if (!isset($_SESSION['user_id'])) {
+    
+    header('Location: login.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -155,9 +165,9 @@
   <div style="text-align:center; margin: 80px auto; background-color: #ffffff10; padding: 30px; width:60%; border-radius: 15px;">
     <h2>Reserve a Table</h2>
     <form method="POST" action="" style="display:flex; flex-direction:column; gap:15px;">
-      <input type="text" name="name" placeholder="Your name" required>
-      <input type="text" name="email" placeholder="Email Address" required>
-      <input type="text" name="phone" placeholder="Phone number" required>
+      <input type="text" name="name" value="<?php echo htmlspecialchars($_SESSION['firstname'] ?? ''); ?>" required>
+      <input type="email" name="email" value="<?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?>" required>
+      <input type="text" name="phone" value="<?php echo htmlspecialchars($_SESSION['phone'] ?? ''); ?>" required>
       <input type="date" name="date" required>
       <input type="time" name="time" required>
       <input type="number" name="people" placeholder="Number of people" min="1" max="20" required>
