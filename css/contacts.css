@@ -56,7 +56,7 @@ button {
   border-radius: 12px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-left: 270px;
+  margin-left: 60px;
 }
 
 button:hover {

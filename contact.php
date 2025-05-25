@@ -9,6 +9,32 @@
     <link rel="stylesheet" href="css/headerstyles.css" />
     <link rel="stylesheet" href="css/footerstyles.css" />
     <link rel="stylesheet" href="css/contacts.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+      #resultFlights {
+        margin: 20px auto;
+        width: 90%;
+        color: white;
+      }
+
+      #resultFlights table {
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.8);
+        color: black;
+        border-radius: 5px;
+      }     
+
+      #resultFlights th {
+        background-color: #ffde65;
+        color: black;
+        padding: 8px;
+      }
+
+      #resultFlights td {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+      } 
+    </style>
   </head>
   <body>
   <?php 
@@ -26,11 +52,8 @@
       >
         <h5 style="font-size: 2rem; color: #f8f8f8">CONTACT</h5>
       </div>
-      <?php if (isset($_GET['success']) && $_GET['success'] === 'flights'): ?>
-        <div style=" color: #155724; padding: 5px; margin: 5px auto; text-align:center; max-width: 600px; font-weight: bold;">
-          Request has been send.
-      </div>
-    <?php endif; ?>
+      
+        <div id="resultDiv" ></div>
 
       <div class="tabs">
         <div class="tab active" onclick="switchForm('flight',event)">
@@ -47,6 +70,7 @@
               style="background-color: lightgrey; color:black"
               type="text"  
               name="name" 
+              id="name"
               placeholder="Name" required 
               readonly 
               value="<?php echo isset($_SESSION['firstname']) ? htmlspecialchars($_SESSION['firstname']) : ''; ?>"
@@ -55,6 +79,7 @@
               <input
                 style="background-color: lightgrey; color:black"
                 type="text"
+                id="lastname"
                 name="lastname"
                 placeholder="Lastname"
                 required
@@ -65,6 +90,7 @@
               <input
                 style="background-color: lightgrey; color:black"
                 type="email"
+                id="email"
                 name="email"
                 placeholder="name@gmail.com"
                 required
@@ -76,6 +102,7 @@
                 style="background-color: lightgrey; color:black"
                 type="tel"
                 name="phone"
+                id="phonenumber"
                 placeholder="+383 000-000-000"
                 pattern="[+0-9]{1,15}"
                 maxlength="15"
@@ -87,18 +114,25 @@
               <input
                 type="text"
                 name="flight_number"
+                id="flight_number"
                 placeholder="1235"
                 minlength="1"
                 maxlength="4"
                 required
               />
               <label>Arrival Date:</label>
-              <input type="date" name="arrival_date" required />
+              <input type="date" name="arrival_date" required  id="arrival_date"/>
               <label>Additional Notes:</label>
-              <textarea name="notes"></textarea>
+              <textarea name="notes" id="notes"></textarea>
               <input type="hidden" name="form_type" value="flight" />
-              <button type="submit" name="submitButton">Submit Flight Details</button>
+              <div id="butonDiv">
+              <button type="submit" name="send" id="send" class="btn-style" style="margin-left: 60px;">Submit Flight Details</button>
+              <button type="button" id="displayRequests" style="margin-top: 20px; margin-left: 65px;">
+              Show my flight requests
+              </button>
+              </div>
             </form>
+            <div id="resultFlights" style="margin-top: 20px;"></div>
           </div>
         </div>
       </div>
@@ -107,8 +141,7 @@
     <?php 
   include("footer.php");
   ?>
-  </body>
-  <script>
+   <script>
   if (window.location.search.includes("success=flights")) {
     setTimeout(() => {
       const url = new URL(window.location);
@@ -116,5 +149,26 @@
       window.history.replaceState({}, document.title, url.pathname);
     }, 3000); 
   }
+</script>
+  </body>
+  <script>
+ $(document).ready(function () {
+    $("#displayRequests").click(function () {
+        $.ajax({
+            url: "php/getFlights.php",
+            method: "GET",
+            success: function (response) {
+                if(response.includes("<table")) {
+                    $("#resultFlights").html(response);
+                } else {
+                    $("#resultFlights").html("<div style='color:white;background:#ffde6561;padding:10px;border-radius:5px;'>" + response + "</div>");
+                }
+            },
+            error: function () {
+                $("#resultFlights").html("<div style='color:red;'>Error loading requests: </div>");
+            }
+        });
+    });
+});
 </script>
 </html>

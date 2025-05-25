@@ -65,7 +65,6 @@ if ($stmt->execute()) {
 } else {
     throw new Exception("Execution failed: " . $stmt->error);
 }
-
 unset($userId);
 $stmt->close();
 $conn->close();
@@ -74,7 +73,8 @@ $conn->close();
 }
 }
 $client = new ClientRequest($name, $lastname, $email, $phone, $requestType, $details);
-header("Location: ../contact.php?success=flights");
+header("Location: ../contact.php");
+echo "Request has been send";
 exit;
 
 ?>
