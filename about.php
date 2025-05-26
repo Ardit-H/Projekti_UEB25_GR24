@@ -9,14 +9,14 @@
 </head>
 <body>
 <?php 
-  include("header.php");
+include_once("header.php");
+include_once("database.php");
 
-  include("database.php");
 
 $user_id = $_SESSION['user_id'] ?? null;
 
 if ($user_id) {
-    echo $user_id;
+    echo "Përdoruesi  është i kyçur.";
 } else {
     echo "Përdoruesi nuk është i kyçur.";
 }
