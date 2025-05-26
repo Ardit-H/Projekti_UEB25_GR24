@@ -6,7 +6,7 @@ session_start();
 if (isset($_POST['submit'])) {
 
     $name = $_POST['name'];
-    $lastname = $_POST['lastname'];
+    $lastname = $_POST['Lastname'];
     $telefon = $_POST['telefon'];
     $email = $_POST['email'];
     $cardnumber = $_POST['cardnumber'];
@@ -36,7 +36,7 @@ function insertBook($room, $checkin, $checkout, $email) {
     global $conn;
     $user_id = $_SESSION['user_id'];
     $name = $_POST['name'];
-    $lastname = $_POST['lastname'];
+    $lastname = $_POST['Lastname'];
 
     // Merr ID-në e dhomës
     $stmt = $conn->prepare("SELECT id FROM rooms WHERE name = ? LIMIT 1");
