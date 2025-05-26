@@ -160,6 +160,32 @@
         <br>
         <button id="updateNotesButton" style="padding: 10px 20px; background-color: #ffde65; border: none; cursor: pointer;">Update Notes</button>
     </div>
+
+    <section id="contact" style="margin: 50px 0; text-align: center;">
+  <h2 style="color: #f5c518;">Contact us</h2>
+  <form id="contact-form" action="send_email.php" method="POST" style="max-width: 500px; margin: auto;">
+    <div style="margin-bottom: 20px;">
+      <label for="name" style="display: block; color: #ffffff;">Name</label>
+      <input type="text" id="name" name="name" placeholder="Type name" required 
+        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+    <div style="margin-bottom: 20px;">
+      <label for="email" style="display: block; color: #ffffff;">Email</label>
+      <input type="email" id="email" name="email" placeholder="Type email" required 
+        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+    <div style="margin-bottom: 20px;">
+      <label for="message" style="display: block; color: #ffffff;">Message</label>
+      <textarea id="message" name="message" rows="5" required placeholder="Type the message you want to send us"
+        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;"></textarea>
+    </div>
+    <button type="submit" 
+      style="background-color: #f5c518; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+      Send
+    </button>
+  </form>
+</section>
+
     
     <script>
         $(document).ready(function () {

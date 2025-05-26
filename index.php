@@ -67,8 +67,8 @@
   </div>
 
   <div style="text-align: center; margin-bottom: 30px;">
-    <input type="text" id="new-ambient" placeholder="Shto ambient të ri" style="padding: 8px; width: 300px; border-radius: 5px; border: none;">
-    <button id="add-ambient-btn" style="padding: 8px 12px; background: #f5c518; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Shto</button>
+    <input type="text" id="new-ambient" placeholder="Add a new environment" style="padding: 8px; width: 300px; border-radius: 5px; border: none;">
+    <button id="add-ambient-btn" style="padding: 8px 12px; background: #f5c518; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Add</button>
   </div>
 
   <div id="ambientet-container" style="text-align:center; margin-bottom: 50px;">
@@ -146,7 +146,7 @@
 
           // Shto një buton për fshirje
           const deleteBtn = document.createElement('button');
-          deleteBtn.textContent = 'Fshij';
+          deleteBtn.textContent = 'Delete';
           deleteBtn.style.marginLeft = '10px';
           deleteBtn.style.padding = '5px 10px';
           deleteBtn.style.background = '#ff4d4d';
