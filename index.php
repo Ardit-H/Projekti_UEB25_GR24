@@ -61,42 +61,50 @@
     <img src="foto/images.jpg" alt="Amanpuri Resort 3">
     <img src="foto/Aman_Amanpuri_Dining_7_0.webp" alt="Amanpuri Resort 4">
   </div>
+  <?php
+    if (!isset($_SESSION['roli'])) {
+        $_SESSION['roli'] = 'user'; 
+    }
 
-  <div style="color: #f5c518;justify-content: center; text-align: center;">
-    <h1>Environments</h1>
-  </div>
-
-  <div style="text-align: center; margin-bottom: 30px;">
-    <input type="text" id="new-ambient" placeholder="Add a new environment" style="padding: 8px; width: 300px; border-radius: 5px; border: none;">
-    <button id="add-ambient-btn" style="padding: 8px 12px; background: #f5c518; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Add</button>
-  </div>
-
-  <div id="ambientet-container" style="text-align:center; margin-bottom: 50px;">
-    <h3 style="color:#f5c518;">Environments:</h3>
-    <ul id="ambientet-list" style="list-style:none; padding:0; color:white; max-width: 400px; margin: 0 auto;"></ul>
-  </div>
+    $role = $_SESSION['roli'];
+    if ($role === 'admin'): 
+  ?>
 
 
-  <!-- <?php
-    // $GLOBALS['ambientet'] = array(
-    //   "Infinity Pool",
-    //   "Beach Lounge",
-    //   "Sunset Bar",
-    //   "Ocean Pavilion",
-    //   "Spa & Wellness Center"
-    // );
+    <div style="color: #f5c518;justify-content: center; text-align: center;">
+      <h1>Environments</h1>
+    </div>
 
-    // function renditRritje() {
-    //   global $ambientet; 
-    //   sort($ambientet); 
-    //   echo "<div style='text-align:center; margin-bottom: 30px;'>";
-    //   echo "<h3 style='color:#f5c518;'>Environments:</h3>";
-    //   echo "<ul style='list-style:none; padding:0; color:white;'>";
-    //   foreach ($ambientet as $a) {
-    //     echo "<li>$a</li>";
-    //   }
-    //   echo "</ul></div>";
-    // }
+    <div style="text-align: center; margin-bottom: 30px;">
+      <input type="text" id="new-ambient" placeholder="Add a new environment" style="padding: 8px; width: 300px; border-radius: 5px; border: none;">
+      <button id="add-ambient-btn" style="padding: 8px 12px; background: #f5c518; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Add</button>
+    </div>
+
+    <div id="ambientet-container" style="text-align:center; margin-bottom: 50px;">
+      <h3 style="color:#f5c518;">Environments:</h3>
+      <ul id="ambientet-list" style="list-style:none; padding:0; color:white; max-width: 400px; margin: 0 auto;"></ul>
+    </div>
+  <?php else: 
+
+    $GLOBALS['ambientet'] = array(
+      "Infinity Pool",
+      "Beach Lounge",
+      "Sunset Bar",
+      "Ocean Pavilion",
+      "Spa & Wellness Center"
+    );
+
+    function renditRritje() {
+      global $ambientet; 
+      sort($ambientet); 
+      echo "<div style='text-align:center; margin-bottom: 30px;'>";
+      echo "<h3 style='color:#f5c518;'>Environments:</h3>";
+      echo "<ul style='list-style:none; padding:0; color:white;'>";
+      foreach ($ambientet as $a) {
+        echo "<li>$a</li>";
+      }
+      echo "</ul></div>";
+    }
 
     // function renditZbritje() {
     //   global $ambientet; 
@@ -111,9 +119,9 @@
     // }
 
     
-    // renditRritje();
+    renditRritje();
     // renditZbritje();
-  ?> -->
+  endif; ?> 
   <script>
     // Funksioni për të shtuar një ambient me AJAX (POST)
   function addAmbient() {
