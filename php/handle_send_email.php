@@ -3,9 +3,9 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 // require 'vendor/autoload.php';
-require 'C:\xampp\htdocs\Projekti\PHPMailer-master\src\Exception.php';
-require 'C:\xampp\htdocs\Projekti\PHPMailer-master\src\PHPMailer.php';
-require 'C:\xampp\htdocs\Projekti\PHPMailer-master\src\SMTP.php';
+require '../PHPMailer-master/src/Exception.php';
+require '../PHPMailer-master/src/PHPMailer.php';
+require '../PHPMailer-master/src/SMTP.php';
 
 session_start();
 
