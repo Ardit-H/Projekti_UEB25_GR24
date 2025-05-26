@@ -14,11 +14,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     if ($result->num_rows === 1){
         $user = $result->fetch_assoc();
 
-        echo "Salt: {$user['salt']}<br>";
-        echo "Salted Hash: {$user['hashed_password']}<br>";
+        // echo "Salt: {$user['salt']}<br>";
+        // echo "Salted Hash: {$user['hashed_password']}<br>";
 
         $hashed_input_password = hash('sha256', $user['salt'] . $password);
-        echo "Pas login: <br>" . $hashed_input_password;
+        // echo "Pas login: <br>" . $hashed_input_password;
         if ($hashed_input_password === $user['hashed_password']) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
