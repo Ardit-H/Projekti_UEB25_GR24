@@ -2,22 +2,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+      <meta charset="UTF-8">
   <title>Amanpuri Hotel - About</title>
   <link rel="stylesheet" href="css/headerstyles.css">
   <link rel="stylesheet" href="css/footerstyles.css">
-
 </head>
 <body>
 <?php 
+  include("header.php");
 
   include("database.php");
-  include("database.php");
 
-$user_id = $_SESSION['user_id'];
-echo $user_id;
+$user_id = $_SESSION['user_id'] ?? null;
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['visitor_comment']) && !empty($_POST['visitor_name'])) {
+if ($user_id) {
+    echo $user_id;
+} else {
+    echo "Përdoruesi nuk është i kyçur.";
+}
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && $user_id && !empty($_POST['visitor_comment']) && !empty($_POST['visitor_name']))
+ {
 
     $newComment = trim($_POST['visitor_comment']);
     $newName = trim($_POST['visitor_name']);
@@ -37,7 +43,6 @@ $sql = "
 
 $result = $conn->query($sql);
 
- include("header.php"); 
 
   ?>
 
@@ -45,8 +50,8 @@ $result = $conn->query($sql);
     <div style="justify-content: center; text-align: center; border-radius: 15px; background-color: #ffde6561; margin-top: -50px;margin-bottom: -10px;">
         <h5 style="font-size: 2rem; color: #f8f8f8;">ABOUT</h5> <!-- Smaller font-size -->
       </div>  </main>
-      
-  
+
+
 <div style="background-color:rgb(255, 255, 255);border-radius: 10px;color:black;padding:20px ;margin-bottom:80px;margin-left: 20px; margin-right: 20px;">
     <h2 style="font-size: 2rem; color: #ffde65;">Location</h2>
     <p>Hotel is located in the idyllic and picturesque region of <span style="background-color: #ffde65; padding: 0 5px;border-radius:20px;">Phuket, Thailand</span>, a world-renowned tropical paradise known 
@@ -78,9 +83,6 @@ $result = $conn->query($sql);
 </div>
 
 <?php
-
-
-
   $visitorComments = [];
     
 if ($result && $result->num_rows > 0) {
@@ -106,7 +108,7 @@ if (isset($_GET['commentsort'])) {
             krsort($visitorComments); 
             break;
         case 'date_asc':
-          
+
             $dates = [];
             foreach ($visitorComments as $name => $data) {
                 $dates[$name] = $data['date'];
@@ -137,7 +139,7 @@ if (isset($_GET['commentsort'])) {
 <div style="background-color:rgb(255, 255, 255);border-radius: 10px;color:black;padding:20px ;margin-bottom:80px ;margin-left: 20px; margin-right: 20px;">
     <h2 style="color:#ffde65;">Visitor Comments</h2>
 
-    
+
     <form method="GET" style="margin-bottom: 15px;">
         <label>Sort by:</label>
         <select name="commentsort" onchange="this.form.submit()">
@@ -158,7 +160,7 @@ if (isset($_GET['commentsort'])) {
         <button type="submit" style="padding: 10px 20px; background-color: #ffde65; border: none; border-radius: 5px; margin-top: 10px;">Post Comment</button>
     </form>
 
-    
+
     <?php foreach ($visitorComments as $name => $data): ?>
         <div style="background-color: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
             <strong><?= htmlspecialchars($name) ?></strong>
@@ -168,7 +170,7 @@ if (isset($_GET['commentsort'])) {
     <?php endforeach; ?>
 </div>
 
-    
+
 
 <?php include("footer.php"); ?>
 </body>
