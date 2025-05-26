@@ -115,6 +115,38 @@
     // renditZbritje();
   ?> -->
   <script>
+    // Funksioni për të shtuar një ambient me AJAX (POST)
+  function addAmbient() {
+    const newAmbient = document.getElementById('new-ambient').value.trim();
+    if (!newAmbient) {
+      alert('Ju lutemi shkruani emrin e ambientit që dëshironi të shtoni.');
+      return;
+    }
+
+    fetch('ambientet.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'ambient=' + encodeURIComponent(newAmbient)
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          document.getElementById('new-ambient').value = ''; // Pastro fushën pas shtimit
+          loadAmbientet(); // Përditëso listën
+        } else {
+          alert('Gabim: ' + (data.message || 'Nuk u mundësua shtimi.'));
+        }
+      })
+      .catch(err => alert('Gabim gjatë shtimit të ambientit: ' + err));
+  }
+
+  // Ngarko ambientet kur faqja të jetë gati
+  document.addEventListener('DOMContentLoaded', () => {
+    loadAmbientet();
+
+    // Lidh funksionin me butonin Add
+    document.getElementById('add-ambient-btn').addEventListener('click', addAmbient);
+  });
   // Funksioni për të fshirë një ambient me AJAX (DELETE)
   function deleteAmbient(ambient) {
     fetch('ambientet.php', {
