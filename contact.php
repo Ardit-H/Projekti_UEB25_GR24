@@ -184,6 +184,7 @@
       Send
     </button>
   </form>
+  <div id="message-box" style="display: none; margin-top: 20px; padding: 10px; border-radius: 5px;"></div>
 </section>
 
     
@@ -250,4 +251,51 @@
 });
 </script>
 
+<script>
+  document.getElementById('contact-form').addEventListener('submit', function (e) {
+    e.preventDefault(); // Parandalon ringarkimin e faqes
+
+    // Merr të dhënat nga forma
+    const name = document.querySelector('#contact-form #name').value.trim();
+    const email = document.querySelector('#contact-form #email').value.trim();
+    const message = document.querySelector('#contact-form #message').value.trim();
+    const messageBox = document.getElementById('message-box');
+
+    // Kontrollon nëse fushat janë të mbushura
+    if (!name || !email || !message) {
+      alert("Ju lutemi plotësoni të gjitha fushat.");
+      return;
+    }
+
+    // Dergo të dhënat në server
+    fetch('send_email.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&message=${encodeURIComponent(message)}`,
+    })
+      .then(response => response.text())
+      .then(data => {
+        // Shfaq rezultatin e dërgimit
+        messageBox.style.display = 'block';
+        if (data.includes('Mesazhi u dërgua me sukses!')) {
+          messageBox.style.backgroundColor = '#d4edda'; // E gjelbër (sukses)
+          messageBox.style.color = '#155724';
+          messageBox.textContent = 'Mesazhi u dërgua me sukses!';
+        } else {
+          messageBox.style.backgroundColor = '#f8d7da'; // E kuqe (gabim)
+          messageBox.style.color = '#721c24';
+          messageBox.textContent = 'Gabim gjatë dërgimit të mesazhit.';
+        }
+      })
+      .catch(error => {
+        // Trajton gabimet e papritura
+        messageBox.style.display = 'block';
+        messageBox.style.backgroundColor = '#f8d7da'; // E kuqe (gabim)
+        messageBox.style.color = '#721c24';
+        messageBox.textContent = 'Një gabim i papritur ndodhi.';
+      });
+  });
+</script>
 </html>
