@@ -62,43 +62,113 @@
     <img src="foto/Aman_Amanpuri_Dining_7_0.webp" alt="Amanpuri Resort 4">
   </div>
 
-  <?php
-    $GLOBALS['ambientet'] = array(
-      "Infinity Pool",
-      "Beach Lounge",
-      "Sunset Bar",
-      "Ocean Pavilion",
-      "Spa & Wellness Center"
-    );
+  <div style="color: #f5c518;justify-content: center; text-align: center;">
+    <h1>Environments</h1>
+  </div>
 
-    function renditRritje() {
-      global $ambientet; 
-      sort($ambientet); 
-      echo "<div style='text-align:center; margin-bottom: 30px;'>";
-      echo "<h3 style='color:#f5c518;'>Environments:</h3>";
-      echo "<ul style='list-style:none; padding:0; color:white;'>";
-      foreach ($ambientet as $a) {
-        echo "<li>$a</li>";
-      }
-      echo "</ul></div>";
-    }
+  <div style="text-align: center; margin-bottom: 30px;">
+    <input type="text" id="new-ambient" placeholder="Shto ambient të ri" style="padding: 8px; width: 300px; border-radius: 5px; border: none;">
+    <button id="add-ambient-btn" style="padding: 8px 12px; background: #f5c518; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Shto</button>
+  </div>
 
-    function renditZbritje() {
-      global $ambientet; 
-      rsort($ambientet); 
-      echo "<div style='text-align:center;'>";
-      echo "<h3 style='color:#f5c518;'>Environments:</h3>";
-      echo "<ul style='list-style:none; padding:0; color:white;'>";
-      foreach ($ambientet as $a) {
-        echo "<li>$a</li>";
-      }
-      echo "</ul></div>";
-    }
+  <div id="ambientet-container" style="text-align:center; margin-bottom: 50px;">
+    <h3 style="color:#f5c518;">Environments:</h3>
+    <ul id="ambientet-list" style="list-style:none; padding:0; color:white; max-width: 400px; margin: 0 auto;"></ul>
+  </div>
+
+
+  <!-- <?php
+    // $GLOBALS['ambientet'] = array(
+    //   "Infinity Pool",
+    //   "Beach Lounge",
+    //   "Sunset Bar",
+    //   "Ocean Pavilion",
+    //   "Spa & Wellness Center"
+    // );
+
+    // function renditRritje() {
+    //   global $ambientet; 
+    //   sort($ambientet); 
+    //   echo "<div style='text-align:center; margin-bottom: 30px;'>";
+    //   echo "<h3 style='color:#f5c518;'>Environments:</h3>";
+    //   echo "<ul style='list-style:none; padding:0; color:white;'>";
+    //   foreach ($ambientet as $a) {
+    //     echo "<li>$a</li>";
+    //   }
+    //   echo "</ul></div>";
+    // }
+
+    // function renditZbritje() {
+    //   global $ambientet; 
+    //   rsort($ambientet); 
+    //   echo "<div style='text-align:center;'>";
+    //   echo "<h3 style='color:#f5c518;'>Environments:</h3>";
+    //   echo "<ul style='list-style:none; padding:0; color:white;'>";
+    //   foreach ($ambientet as $a) {
+    //     echo "<li>$a</li>";
+    //   }
+    //   echo "</ul></div>";
+    // }
 
     
-    renditRritje();
+    // renditRritje();
     // renditZbritje();
-  ?>
+  ?> -->
+  <script>
+  // Funksioni për të fshirë një ambient me AJAX (DELETE)
+  function deleteAmbient(ambient) {
+    fetch('ambientet.php', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'ambient=' + encodeURIComponent(ambient)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        loadAmbientet();
+      } else {
+        alert('Gabim: ' + data.message);
+      }
+    })
+    .catch(err => alert('Gabim gjatë fshirjes së ambientit: ' + err));
+  }
+
+  // Përditëso funksionin e ngarkimit për të shtuar opsionin e fshirjes
+  function loadAmbientet() {
+    fetch('ambientet.php')
+      .then(response => response.json())
+      .then(data => {
+        const list = document.getElementById('ambientet-list');
+        list.innerHTML = '';
+        data.forEach(a => {
+          const li = document.createElement('li');
+          li.textContent = a;
+
+          // Shto një buton për fshirje
+          const deleteBtn = document.createElement('button');
+          deleteBtn.textContent = 'Fshij';
+          deleteBtn.style.marginLeft = '10px';
+          deleteBtn.style.padding = '5px 10px';
+          deleteBtn.style.background = '#ff4d4d';
+          deleteBtn.style.color = 'white';
+          deleteBtn.style.border = 'none';
+          deleteBtn.style.borderRadius = '5px';
+          deleteBtn.style.cursor = 'pointer';
+
+          // Event për fshirje
+          deleteBtn.addEventListener('click', () => deleteAmbient(a));
+
+          li.appendChild(deleteBtn);
+          list.appendChild(li);
+        });
+      })
+      .catch(err => console.error('Gabim në ngarkimin e ambientëve:', err));
+  }
+
+  // Ngarko ambientet kur faqja të jetë gati
+  document.addEventListener('DOMContentLoaded', loadAmbientet);
+</script>
+
 
   
   <?php 
