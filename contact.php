@@ -1,5 +1,10 @@
 <?php
   session_start();
+  $user_id = $_SESSION['user_id'] ?? null;
+  $firstname = $_SESSION['firstname'] ?? '';
+  $lastname = $_SESSION['lastname'] ?? '';
+  $username = trim($firstname . " " . $lastname);
+  $email=$_SESSION['email'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -166,12 +171,12 @@
   <form id="contact-form" action="send_email.php" method="POST" style="max-width: 500px; margin: auto;">
     <div style="margin-bottom: 20px;">
       <label for="name" style="display: block; color: #ffffff;">Name</label>
-      <input type="text" id="name" name="name" placeholder="Type name" required 
+      <input type="text" id="name" name="name" value="<?= htmlspecialchars($username ?? '') ?>" placeholder="Type name" required <?= $user_id ? 'readonly' : '' ?>
         style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
     </div>
     <div style="margin-bottom: 20px;">
       <label for="email" style="display: block; color: #ffffff;">Email</label>
-      <input type="email" id="email" name="email" placeholder="Type email" required 
+      <input type="email" id="email" name="email" value="<?= htmlspecialchars($email ?? '') ?>" placeholder="Type email" required <?= $user_id ? 'readonly' : '' ?>
         style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
     </div>
     <div style="margin-bottom: 20px;">
@@ -183,8 +188,8 @@
       style="background-color: #f5c518; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
       Send
     </button>
+    <div id="message-box" style="display: none; margin-top: 20px; padding: 10px; border-radius: 5px;"></div>
   </form>
-  <div id="message-box" style="display: none; margin-top: 20px; padding: 10px; border-radius: 5px;"></div>
 </section>
 
     
