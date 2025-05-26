@@ -40,7 +40,14 @@
   <?php 
   include("header.php");
   ?>
-
+    <?php 
+              if(isset($_SESSION["user_id"])):     
+            if (isset($_GET['success']) && $_GET['success'] == '1') {
+                echo '<div style="color: green; text-align: center; font-size: 1.5rem; margin: 20px;">
+                          Your contact message has been sent successfully!
+                      </div>';
+            }
+?>
     <div class="">
       <div
         style="
@@ -137,6 +144,76 @@
         </div>
       </div>
     </div>
+    <?php else: ?>
+      <div style="text-align: center; padding: 20px; color: red;">
+        <h2>You must be logged in to access the contact form.</h2>
+        <a href="login.php" style="color: blue; text-decoration: underline;">Click here to log in</a>
+      </div> 
+    <?php endif; ?>
+    <div style="margin: 20px auto; width: 90%; text-align: center;">
+        <h3 style="color: white;">Update Notes for a Flight</h3>
+        <label for="flightNumberInput" style="color: white;">Flight Number:</label>
+        <input type="text" id="flightNumberInput" placeholder="Enter Flight Number" maxlength="4" style="padding: 5px; margin: 10px;">
+        <br>
+        <label for="notesInput" style="color: white;">Notes:</label>
+        <textarea id="notesInput" placeholder="Enter your notes" style="padding: 5px; margin: 10px; width: 50%;"></textarea>
+        <br>
+        <button id="updateNotesButton" style="padding: 10px 20px; background-color: #ffde65; border: none; cursor: pointer;">Update Notes</button>
+    </div>
+
+    <section id="contact" style="margin: 50px 0; text-align: center;">
+  <h2 style="color: #f5c518;">Contact us</h2>
+  <form id="contact-form" action="send_email.php" method="POST" style="max-width: 500px; margin: auto;">
+    <div style="margin-bottom: 20px;">
+      <label for="name" style="display: block; color: #ffffff;">Name</label>
+      <input type="text" id="name" name="name" placeholder="Type name" required 
+        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+    <div style="margin-bottom: 20px;">
+      <label for="email" style="display: block; color: #ffffff;">Email</label>
+      <input type="email" id="email" name="email" placeholder="Type email" required 
+        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+    <div style="margin-bottom: 20px;">
+      <label for="message" style="display: block; color: #ffffff;">Message</label>
+      <textarea id="message" name="message" rows="5" required placeholder="Type the message you want to send us"
+        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;"></textarea>
+    </div>
+    <button type="submit" 
+      style="background-color: #f5c518; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+      Send
+    </button>
+  </form>
+</section>
+
+    
+    <script>
+        $(document).ready(function () {
+            $("#updateNotesButton").click(function () {
+                const flightNumber = $("#flightNumberInput").val().trim();
+                const notes = $("#notesInput").val().trim();
+    
+                if (!flightNumber || !notes) {
+                    alert("Please fill in both the Flight Number and Notes fields.");
+                    return;
+                }
+    
+                $.ajax({
+                    url: "php/updateNotes.php",
+                    method: "POST",
+                    data: { flight_number: flightNumber, notes: notes },
+                    success: function (response) {
+                        alert(response);
+                        $("#flightNumberInput").val(""); // Clear input fields
+                        $("#notesInput").val("");
+                    },
+                    error: function () {
+                        alert("An error occurred while updating the notes.");
+                    }
+                });
+            });
+        });
+    </script>
 
     <?php 
   include("footer.php");
@@ -150,6 +227,7 @@
     }, 3000); 
   }
 </script>
+
   </body>
   <script>
  $(document).ready(function () {
@@ -171,4 +249,5 @@
     });
 });
 </script>
+
 </html>

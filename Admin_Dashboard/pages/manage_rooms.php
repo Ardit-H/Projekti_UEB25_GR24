@@ -1,59 +1,65 @@
-<?php
-include_once("../database.php"); 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Room Reservations</title>
+  <style>
+    table { width: 100%; border-collapse: collapse; text-align: center; }
+    th, td { border: 1px solid #ccc; padding: 8px; }
+    thead { background: #f5c518; color: black; }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
 
-$sql = "SELECT 
-            br.id AS booking_id,
-            r.name AS room_name,
-            r.price AS room_price,
-            u.firstname,
-            u.lastname,
-            u.username,
-            br.check_in_time,
-            br.check_out_time
-        FROM book_room br
-        LEFT JOIN rooms r ON br.room_id = r.id
-        LEFT JOIN users u ON br.user_id = u.id
-        ORDER BY br.check_in_time DESC";
+<h2>Room Reservations</h2>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Room</th>
+      <th>Price (€)</th>
+      <th>User</th>
+      <th>Check-In</th>
+      <th>Check-Out</th>
+    </tr>
+  </thead>
+  <tbody id="reservations"></tbody>
+</table>
 
-$result = mysqli_query($conn, $sql);
+<script>
+$(document).ready(function(){
+    function loadReservations(){
+        $.ajax({
+            url: 'pages/API_get_room_reservations.php',
+            method: 'GET',
+            dataType: 'json',
+            success: function(data){
+                if(data.length === 0){
+                    $('#reservations').html('<tr><td colspan="6">No reservations found</td></tr>');
+                    return;
+                }
+                let rows = '';
+                $.each(data, function(i, row){
+                    rows += `<tr>
+                        <td>${row.booking_id}</td>
+                        <td>${row.room_name}</td>
+                        <td>${row.total_price}</td>
+                        <td>${row.firstname} ${row.lastname} (${row.username})</td>
+                        <td>${row.check_in_time}</td>
+                        <td>${row.check_out_time}</td>
+                    </tr>`;
+                });
+                $('#reservations').html(rows);
+            },
+            error: function(){
+                $('#reservations').html('<tr><td colspan="6" style="color:red;">Failed to load reservations</td></tr>');
+            }
+        });
+    }
+    loadReservations();
+});
+</script>
 
-if (!$result) {
-    echo "<p style='color:red;'>Error retrieving reservations: " . mysqli_error($conn) . "</p>";
-    exit;
-}
-?>
-<div class="dashboard-section">
-    <h2>Room Reservations</h2>
-    <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; text-align: center;">
-        <thead style="background-color: #f5c518;; color: black;">
-            <tr>
-                <th>Reservation ID</th>
-                <th>Room Name</th>
-                <th>Price (€)</th>
-                <th>User</th>
-                <th>Check-In</th>
-                <th>Check-Out</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php while ($row = mysqli_fetch_assoc($result)): ?>
-                <?php
-                $checkin = new DateTime($row['check_in_time']);
-                $checkout = new DateTime($row['check_out_time']);
-                $interval = $checkin->diff($checkout);
-                $numOfDays = $interval->days;
-                $totalPrice = $numOfDays * $row['room_price'];
-                $formattedPrice = number_format($totalPrice, 2);
-                ?>
-                <tr>
-                    <td><?= htmlspecialchars($row['booking_id']) ?></td>
-                    <td><?= htmlspecialchars($row['room_name']) ?></td>
-                    <td><?= htmlspecialchars($formattedPrice) ?></td>
-                    <td><?= htmlspecialchars($row['firstname'] . ' ' . $row['lastname']) ?> (<?= htmlspecialchars($row['username']) ?>)</td>
-                    <td><?= htmlspecialchars($row['check_in_time']) ?></td>
-                    <td><?= htmlspecialchars($row['check_out_time']) ?></td>
-                </tr>
-            <?php endwhile; ?>
-        </tbody>
-    </table>
-</div>
+</body>
+</html>

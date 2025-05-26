@@ -1,3 +1,13 @@
+<?php
+session_start(); 
+require_once("database.php");
+
+if (!isset($_SESSION['user_id'])) {
+    
+    header('Location: login.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -155,9 +165,9 @@
   <div style="text-align:center; margin: 80px auto; background-color: #ffffff10; padding: 30px; width:60%; border-radius: 15px;">
     <h2>Reserve a Table</h2>
     <form method="POST" action="" style="display:flex; flex-direction:column; gap:15px;">
-      <input type="text" name="name" placeholder="Your name" required>
-      <input type="text" name="email" placeholder="Email Address" required>
-      <input type="text" name="phone" placeholder="Phone number" required>
+      <input type="text" name="name" value="<?php echo htmlspecialchars($_SESSION['firstname'] ?? ''); ?>" required>
+      <input type="email" name="email" value="<?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?>" required>
+      <input type="text" name="phone" value="<?php echo htmlspecialchars($_SESSION['phone'] ?? ''); ?>" required>
       <input type="date" name="date" required>
       <input type="time" name="time" required>
       <input type="number" name="people" placeholder="Number of people" min="1" max="20" required>
@@ -212,11 +222,26 @@
     } else if(!preg_match("/^[1-9][0-9]*$/" , $people ) || $people > 20){
       echo "<p style='color:red; text-align: center;'>❌ Please enter a valid number of people (1-20). </p>";
     } else {
-      echo "<p style='color:green; text-align:center;'>✅ Reservation received for <strong>$people person(s) </strong> on <strong>$date</strong> at <strong>$time</strong>!<br>
-      We'll contact you soon. </p>";
-      echo "<script>
-      localStorage.setItem('reservationSuccess', 'true');
-    </script>";
+      $reservation_datetime = $date . ' ' . $time;
+
+      $user_id = $_SESSION['user_id'];
+
+      $stmt = $conn->prepare("INSERT INTO book_table (user_id, reservation_moment, number_of_people) VALUES (?, ?, ?)");
+
+      if ($stmt) {
+      
+      $stmt->bind_param("isi", $user_id, $reservation_datetime, $people);
+
+      if ($stmt->execute()) {
+          echo "<p style='color:green; text-align:center;'>✅ Rezervimi u ruajt me sukses në bazën e të dhënave.</p>";
+      } else {
+          echo "<p style='color:red; text-align:center;'>❌ Gabim gjatë ruajtjes së rezervimit: " . htmlspecialchars($stmt->error) . "</p>";
+      }
+
+      $stmt->close();
+      } else {
+          echo "<p style='color:red; text-align:center;'>❌ Gabim gjatë përgatitjes së deklaratës: " . htmlspecialchars($conn->error) . "</p>";
+      }
     }
   }
   ?>

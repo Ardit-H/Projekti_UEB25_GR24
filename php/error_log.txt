@@ -1,0 +1,11 @@
+Error [2] in C:\xampp\htdocs\Projekti_UEB25_GR24\php\submitRequest.php row 19: Undefined array key "firstname"
+Error [2] in C:\xampp\htdocs\Projekti_UEB25_GR24\php\submitRequest.php row 20: Undefined array key "lastname"
+Error [2] in C:\xampp\htdocs\Projekti_UEB25_GR24\php\submitRequest.php row 21: Undefined array key "email"
+Error [2] in C:\xampp\htdocs\Projekti_UEB25_GR24\php\submitRequest.php row 22: Undefined array key "phone"
+Error [2] in C:\xampp\htdocs\Projekti_UEB25_GR24\php\submitRequest.php row 79: Undefined variable $name
+Error [2] in C:\xampp\htdocs\Projekti_UEB25_GR24\php\submitRequest.php row 79: Undefined variable $lastname
+Error [2] in C:\xampp\htdocs\Projekti_UEB25_GR24\php\submitRequest.php row 79: Undefined variable $email
+Error [2] in C:\xampp\htdocs\Projekti_UEB25_GR24\php\submitRequest.php row 79: Undefined variable $phone
+Error [2] in C:\xampp\htdocs\Projekti_UEB25_GR24\php\submitRequest.php row 79: Undefined variable $requestType
+Error [2] in C:\xampp\htdocs\Projekti_UEB25_GR24\php\submitRequest.php row 79: Undefined variable $details
+Error [2] in C:\xampp\htdocs\Projekti_UEB25_GR24\php\clientRequest.php row 16: foreach() argument must be of type array|object, null given
