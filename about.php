@@ -9,14 +9,17 @@
 </head>
 <body>
 <?php 
-  include("header.php");
+include_once("header.php");
+include_once("database.php");
 
-  include("database.php");
 
 $user_id = $_SESSION['user_id'] ?? null;
+    $firstname=$_SESSION['firstname'];
+    $lastname=$_SESSION['lastname'];
+    $username=$firstname." ".$lastname;
 
 if ($user_id) {
-    echo $user_id;
+    echo "Përdoruesi  është i kyçur.";
 } else {
     echo "Përdoruesi nuk është i kyçur.";
 }
@@ -27,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $user_id && !empty($_POST['visitor_c
 
     $newComment = trim($_POST['visitor_comment']);
     $newName = trim($_POST['visitor_name']);
+
 
     $stmt = $conn->prepare("INSERT INTO comments (user_id, comment, name) VALUES (?, ?, ?)");
     $stmt->bind_param("iss", $user_id, $newComment, $newName);
@@ -153,8 +157,12 @@ if (isset($_GET['commentsort'])) {
 
     <h3 style="margin-top: 30px;">Leave a Comment</h3>
     <form method="POST" style="margin-bottom: 30px;">
-        <input type="text" name="visitor_name" placeholder="Your name" required 
-            style="padding: 8px; width: 200px; border-radius: 5px; border: 1px solid #ccc; margin-bottom: 10px;"><br>
+        <input type="text" name="visitor_name" 
+       value="<?= htmlspecialchars($username ?? '') ?>" 
+       placeholder="Your name" required 
+       <?= $user_id ? 'readonly' : '' ?>
+       style="padding: 8px; width: 200px; border-radius: 5px; border: 1px solid #ccc; margin-bottom: 10px;">
+<br>
         <textarea name="visitor_comment" placeholder="Your comment..." required 
             style="padding: 10px; width: 300px; height: 80px; border-radius: 5px; border: 1px solid #ccc;"></textarea><br>
         <button type="submit" style="padding: 10px 20px; background-color: #ffde65; border: none; border-radius: 5px; margin-top: 10px;">Post Comment</button>
