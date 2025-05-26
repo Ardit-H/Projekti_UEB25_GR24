@@ -1,14 +1,22 @@
-<?php
-    session_start();
-    function sendEmail($subject ,$message){
-        $to      = $_SESSION['email']; 
-        $headers = 'From: info@ourPage.com' . "\r\n" .
-                'Reply-To: info@ourPage.com' . "\r\n" .
-                'X-Mailer: PHP/' . phpversion();
-        if (mail($to, $subject, $message, $headers)) {
-            echo "Emaili was send !";
-        } else {
-            echo "Email was not send !";
-        }
+<?php 
+session_start();
+
+function sendEmail($subject, $message) {
+    // Ensure email is set and valid
+    if (!isset($_SESSION['email']) || !filter_var($_SESSION['email'], FILTER_VALIDATE_EMAIL)) {
+        die("Invalid or missing email address.");
     }
+
+    $to = $_SESSION['email'];
+    $headers = 'From: Amanpuri Hotel <dua.gashi@student.uni_pr.edu>' . "\r\n" .
+               'Reply-To: duagashi14@gmail.com' . "\r\n" .
+               'X-Mailer: PHP/' . phpversion();
+
+    // Send email
+    if (mail($to, $subject, $message, $headers)) {
+        echo "Email was sent successfully!";
+    } else {
+        echo "Email was not sent.";
+    }
+}
 ?>

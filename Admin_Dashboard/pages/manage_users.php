@@ -188,7 +188,7 @@ if (!$result) {
         <th>Role</th>
         <th>Card Number</th>
         <th>Created</th>
-        <th>Veprimi</th>
+        <th>Action</th>
     </tr>
 </thead>
 <tbody>
