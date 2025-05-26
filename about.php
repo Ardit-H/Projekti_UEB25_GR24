@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 $sql = "
-    SELECT name, comment
+    SELECT name, comment, created_at
     FROM comments    
 ";
 
@@ -91,9 +91,16 @@ $result = $conn->query($sql);
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $name = $row['name'] ?? "Anonymous";
-        $visitorComments[$name] = [
-            "comment" => $row['comment'],
-            "date" => date("Y-m-d")
+        $comment = $row['comment'];
+        $date = $row['created_at'] ?? date("Y-m-d");
+
+        if (!isset($visitorComments[$name])) {
+            $visitorComments[$name] = [];
+        }
+
+        $visitorComments[$name][] = [
+            "comment" => $comment,
+            "created_at" => $date
         ];
     }
 }
@@ -114,7 +121,7 @@ if (isset($_GET['commentsort'])) {
 
             $dates = [];
             foreach ($visitorComments as $name => $data) {
-                $dates[$name] = $data['date'];
+                $dates[$name] = $data['created_at'];
             }
             asort($dates);
             $sorted = [];
@@ -126,7 +133,7 @@ if (isset($_GET['commentsort'])) {
         case 'date_desc':
             $dates = [];
             foreach ($visitorComments as $name => $data) {
-                $dates[$name] = $data['date'];
+                $dates[$name] = $data['created_at'];
             }
             arsort($dates);
             $sorted = [];
@@ -167,14 +174,16 @@ if (isset($_GET['commentsort'])) {
         <button type="submit" style="padding: 10px 20px; background-color: #ffde65; border: none; border-radius: 5px; margin-top: 10px;">Post Comment</button>
     </form>
 
-
-    <?php foreach ($visitorComments as $name => $data): ?>
+<?php foreach ($visitorComments as $name => $commentsList): ?>
+    <?php foreach ($commentsList as $data): ?>
         <div style="background-color: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
             <strong><?= htmlspecialchars($name) ?></strong>
-            <span style="float: right; color: gray; font-size: 0.9em;"><?= date("F j, Y", strtotime($data['date'])) ?></span>
+            <span style="float: right; color: gray; font-size: 0.9em;"><?= date("F j, Y", strtotime($data['created_at'])) ?></span>
             <p style="margin-top: 5px;"><?= htmlspecialchars($data['comment']) ?></p>
         </div>
     <?php endforeach; ?>
+<?php endforeach; ?>
+
 </div>
 
 
