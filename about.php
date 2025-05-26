@@ -12,34 +12,33 @@
 include_once("header.php");
 include_once("database.php");
 
-
 $user_id = $_SESSION['user_id'] ?? null;
-    $firstname=$_SESSION['firstname'];
-    $lastname=$_SESSION['lastname'];
-    $username=$firstname." ".$lastname;
+$firstname = $_SESSION['firstname'] ?? '';
+$lastname = $_SESSION['lastname'] ?? '';
+$username = trim($firstname . " " . $lastname);
 
-if ($user_id) {
-    echo "Përdoruesi  është i kyçur.";
-} else {
-    echo "Përdoruesi nuk është i kyçur.";
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!$user_id) {
+        header("Location: login.php");
+        exit();
+    }
+
+    if (!empty($_POST['visitor_comment']) && !empty($_POST['visitor_name'])) {
+        $newComment = trim($_POST['visitor_comment']);
+        $newName = trim($_POST['visitor_name']);
+
+        $stmt = $conn->prepare("INSERT INTO comments (user_id, comment, name) VALUES (?, ?, ?)");
+        $stmt->bind_param("iss", $user_id, $newComment, $newName);
+        $stmt->execute();
+        $stmt->close();
+
+        header("Location: about.php");
+        exit();
+    }
 }
 
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && $user_id && !empty($_POST['visitor_comment']) && !empty($_POST['visitor_name']))
- {
-
-    $newComment = trim($_POST['visitor_comment']);
-    $newName = trim($_POST['visitor_name']);
-
-
-    $stmt = $conn->prepare("INSERT INTO comments (user_id, comment, name) VALUES (?, ?, ?)");
-    $stmt->bind_param("iss", $user_id, $newComment, $newName);
-    $stmt->execute();
-    $stmt->close();
-
-    header("Location: about.php");
-    exit();
-}
 $sql = "
     SELECT name, comment
     FROM comments    
