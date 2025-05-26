@@ -243,6 +243,7 @@ if (!isset($_SESSION['user_id'])) {
           echo "<p style='color:red; text-align:center;'>❌ Gabim gjatë përgatitjes së deklaratës: " . htmlspecialchars($conn->error) . "</p>";
       }
     }
+  }
   ?>
   <!-- JavaScript për kontrollimin dhe shfaqjen e mesazhit vetëm një herë -->
 <script>
