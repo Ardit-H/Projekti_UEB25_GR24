@@ -61,24 +61,50 @@
     <img src="foto/images.jpg" alt="Amanpuri Resort 3">
     <img src="foto/Aman_Amanpuri_Dining_7_0.webp" alt="Amanpuri Resort 4">
   </div>
+  <?php
+    if (!isset($_SESSION['roli'])) {
+        $_SESSION['roli'] = 'user'; 
+    }
 
-  <div style="color: #f5c518;justify-content: center; text-align: center;">
-    <h1>Environments</h1>
-  </div>
-
-  <div style="text-align: center; margin-bottom: 30px;">
-    <input type="text" id="new-ambient" placeholder="Add a new environment" style="padding: 8px; width: 300px; border-radius: 5px; border: none;">
-    <button id="add-ambient-btn" style="padding: 8px 12px; background: #f5c518; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Add</button>
-  </div>
-
-  <div id="ambientet-container" style="text-align:center; margin-bottom: 50px;">
-    <h3 style="color:#f5c518;">Environments:</h3>
-    <ul id="ambientet-list" style="list-style:none; padding:0; color:white; max-width: 400px; margin: 0 auto;"></ul>
-  </div>
+    $role = $_SESSION['roli'];
+    if ($role === 'admin'): 
+  ?>
 
 
-  <!-- <?php
-    // $GLOBALS['ambientet'] = array(
+    <div style="color: #f5c518;justify-content: center; text-align: center;">
+      <h1>Environments</h1>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 30px;">
+      <input type="text" id="new-ambient" placeholder="Add a new environment" style="padding: 8px; width: 300px; border-radius: 5px; border: none;">
+      <button id="add-ambient-btn" style="padding: 8px 12px; background: #f5c518; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Add</button>
+    </div>
+
+    <div id="ambientet-container" style="text-align:center; margin-bottom: 50px;">
+      <h3 style="color:#f5c518;">Environments:</h3>
+      <ul id="ambientet-list" style="list-style:none; padding:0; color:white; max-width: 400px; margin: 0 auto;"></ul>
+    </div>
+  <?php else: ?>
+    <div style="color: #f5c518;justify-content: center; text-align: center;"><h1> Our Featured Environments</h1></div>
+
+  <ul style="list-style:none; padding:0; text-align:center; color:white;">
+    <?php
+    // Lexo ambientet nga ambientet.json
+    $ambientetJson = file_get_contents('ambientet.json');
+    $ambientetArray = json_decode($ambientetJson, true);
+
+    // Shfaq secilin ambient
+    if ($ambientetArray && is_array($ambientetArray)) {
+      foreach ($ambientetArray as $ambient) {
+        echo "<li>" . htmlspecialchars($ambient) . "</li>";
+      }
+    } else {
+      echo "<li>No environments available.</li>";
+    }
+    ?>
+  </ul>
+
+    <!-- // $GLOBALS['ambientet'] = array(
     //   "Infinity Pool",
     //   "Beach Lounge",
     //   "Sunset Bar",
@@ -112,9 +138,41 @@
 
     
     // renditRritje();
-    // renditZbritje();
-  ?> -->
+    // renditZbritje(); -->
+  <?php endif; ?> 
   <script>
+    // Funksioni për të shtuar një ambient me AJAX (POST)
+  function addAmbient() {
+    const newAmbient = document.getElementById('new-ambient').value.trim();
+    if (!newAmbient) {
+      alert('Ju lutemi shkruani emrin e ambientit që dëshironi të shtoni.');
+      return;
+    }
+
+    fetch('ambientet.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'ambient=' + encodeURIComponent(newAmbient)
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          document.getElementById('new-ambient').value = ''; // Pastro fushën pas shtimit
+          loadAmbientet(); // Përditëso listën
+        } else {
+          alert('Gabim: ' + (data.message || 'Nuk u mundësua shtimi.'));
+        }
+      })
+      .catch(err => alert('Gabim gjatë shtimit të ambientit: ' + err));
+  }
+
+  // Ngarko ambientet kur faqja të jetë gati
+  document.addEventListener('DOMContentLoaded', () => {
+    loadAmbientet();
+
+    // Lidh funksionin me butonin Add
+    document.getElementById('add-ambient-btn').addEventListener('click', addAmbient);
+  });
   // Funksioni për të fshirë një ambient me AJAX (DELETE)
   function deleteAmbient(ambient) {
     fetch('ambientet.php', {
