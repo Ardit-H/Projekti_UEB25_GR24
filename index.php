@@ -84,27 +84,45 @@
       <h3 style="color:#f5c518;">Environments:</h3>
       <ul id="ambientet-list" style="list-style:none; padding:0; color:white; max-width: 400px; margin: 0 auto;"></ul>
     </div>
-  <?php else: 
+  <?php else: ?>
+    <div style="color: #f5c518;justify-content: center; text-align: center;"><h1> Our Featured Environments</h1></div>
 
-    $GLOBALS['ambientet'] = array(
-      "Infinity Pool",
-      "Beach Lounge",
-      "Sunset Bar",
-      "Ocean Pavilion",
-      "Spa & Wellness Center"
-    );
+  <ul style="list-style:none; padding:0; text-align:center; color:white;">
+    <?php
+    // Lexo ambientet nga ambientet.json
+    $ambientetJson = file_get_contents('ambientet.json');
+    $ambientetArray = json_decode($ambientetJson, true);
 
-    function renditRritje() {
-      global $ambientet; 
-      sort($ambientet); 
-      echo "<div style='text-align:center; margin-bottom: 30px;'>";
-      echo "<h3 style='color:#f5c518;'>Environments:</h3>";
-      echo "<ul style='list-style:none; padding:0; color:white;'>";
-      foreach ($ambientet as $a) {
-        echo "<li>$a</li>";
+    // Shfaq secilin ambient
+    if ($ambientetArray && is_array($ambientetArray)) {
+      foreach ($ambientetArray as $ambient) {
+        echo "<li>" . htmlspecialchars($ambient) . "</li>";
       }
-      echo "</ul></div>";
+    } else {
+      echo "<li>No environments available.</li>";
     }
+    ?>
+  </ul>
+
+    <!-- // $GLOBALS['ambientet'] = array(
+    //   "Infinity Pool",
+    //   "Beach Lounge",
+    //   "Sunset Bar",
+    //   "Ocean Pavilion",
+    //   "Spa & Wellness Center"
+    // );
+
+    // function renditRritje() {
+    //   global $ambientet; 
+    //   sort($ambientet); 
+    //   echo "<div style='text-align:center; margin-bottom: 30px;'>";
+    //   echo "<h3 style='color:#f5c518;'>Environments:</h3>";
+    //   echo "<ul style='list-style:none; padding:0; color:white;'>";
+    //   foreach ($ambientet as $a) {
+    //     echo "<li>$a</li>";
+    //   }
+    //   echo "</ul></div>";
+    // }
 
     // function renditZbritje() {
     //   global $ambientet; 
@@ -119,9 +137,9 @@
     // }
 
     
-    renditRritje();
-    // renditZbritje();
-  endif; ?> 
+    // renditRritje();
+    // renditZbritje(); -->
+  <?php endif; ?> 
   <script>
     // Funksioni për të shtuar një ambient me AJAX (POST)
   function addAmbient() {
